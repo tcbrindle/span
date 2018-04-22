@@ -4,7 +4,7 @@
 
 This repository contains a single-header implementation of C++20's `std::span`,
 conforming to [P0122R7](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf).
-It is compatible with C++11, but will use newer language features if these
+It is compatible with C++11, but will use newer language features if they
 are available.
 
 It differs from the implementation in the [Microsoft GSL](https://github.com/Microsoft/GSL/)
@@ -79,7 +79,7 @@ This implementation provides several extensions to the current specification.
 
    auto s1 = make_span(c_array);   // returns span<const int, 3>
    auto s2 = make_span(std_array); // returns span<int, 3>
-   auto s3 = make_span(vec);       // returns span<int, dynamic_extent>
+   auto s3 = make_span(vec);       // returns span<const int, dynamic_extent>
    ```
 
  * Added `front()` and `back()` member functions

@@ -30,11 +30,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <cstddef>
 #include <type_traits>
 
-#ifdef __cpp_exceptions
+#ifndef TCB_SPAN_NO_EXCEPTIONS
+// Attempt to discover whether we're being compiled with exception support
+#if !(defined(__cpp_exceptions) || defined(__EXCEPTIONS))
+#define TCB_SPAN_NO_EXCEPTIONS
+#endif
+#endif
+
+#ifndef TCB_SPAN_NO_EXCEPTIONS
 #include <cstdio>
 #include <stdexcept>
 #endif
-
 
 // Various feature test macros
 
@@ -379,7 +385,7 @@ public:
 #ifndef TCB_SPAN_STD_COMPLIANT_MODE
     TCB_SPAN_CONSTEXPR14 reference at(index_type idx) const
     {
-#ifdef __cpp_exceptions
+#ifndef TCB_SPAN_NO_EXCEPTIONS
         if (idx < 0 || idx >= size()) {
             char msgbuf[64] = {0, };
             std::snprintf(msgbuf, sizeof(msgbuf), "Index %td is out of range for span of size %td", idx, size());
@@ -388,6 +394,11 @@ public:
 #endif // TCB_SPAN_NO_EXCEPTIONS
         return this->operator[](idx);
     }
+
+    constexpr reference front() const { return this->operator[](0); }
+
+    constexpr reference back() const { return this->operator[](size() - 1); }
+
 #endif // TCB_SPAN_STD_COMPLIANT_MODE
 
 #ifndef TCB_SPAN_NO_FUNCTION_CALL_OPERATOR
