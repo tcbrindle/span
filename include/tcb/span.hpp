@@ -104,7 +104,7 @@ using byte = std::byte;
 using byte = unsigned char;
 #endif
 
-TCB_SPAN_INLINE_VAR constexpr ptrdiff_t dynamic_extent = -1;
+TCB_SPAN_INLINE_VAR constexpr std::ptrdiff_t dynamic_extent = -1;
 
 template <typename ElementType, std::ptrdiff_t Extent = dynamic_extent>
 class span;
