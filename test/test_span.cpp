@@ -3,9 +3,9 @@
 #include <tcb/span.hpp>
 
 #include <cassert>
+#include <deque>
 #include <initializer_list>
 #include <vector>
-#include <deque>
 
 #include "catch.hpp"
 
@@ -21,14 +21,16 @@ TEST_CASE("default construction")
                   "");
     static_assert(!std::is_default_constructible<span<int, 42>>::value, "");
 
-    SECTION("dynamic size") {
+    SECTION("dynamic size")
+    {
         constexpr span<int> s{};
         static_assert(s.size() == 0);
         static_assert(s.data() == nullptr);
         static_assert(s.begin() == s.end());
     }
 
-    SECTION("fixed size") {
+    SECTION("fixed size")
+    {
         constexpr span<int, 0> s{};
         static_assert(s.size() == 0);
         static_assert(s.data() == nullptr);
@@ -36,18 +38,21 @@ TEST_CASE("default construction")
     }
 }
 
-
 TEST_CASE("(pointer, length) construction")
 {
     static_assert(std::is_constructible<span<int>, int*, int>::value, "");
     static_assert(std::is_constructible<span<const int>, int*, int>::value, "");
-    static_assert(std::is_constructible<span<const int>, const int*, int>::value, "");
+    static_assert(
+        std::is_constructible<span<const int>, const int*, int>::value, "");
 
     static_assert(std::is_constructible<span<int, 42>, int*, int>::value, "");
-    static_assert(std::is_constructible<span<const int, 42>, int*, int>::value, "");
-    static_assert(std::is_constructible<span<const int, 42>, const int*, int>::value, "");
+    static_assert(std::is_constructible<span<const int, 42>, int*, int>::value,
+                  "");
+    static_assert(
+        std::is_constructible<span<const int, 42>, const int*, int>::value, "");
 
-    SECTION("dynamic size") {
+    SECTION("dynamic size")
+    {
         int arr[] = {1, 2, 3};
         span<int> s(arr, 3);
 
@@ -57,7 +62,8 @@ TEST_CASE("(pointer, length) construction")
         REQUIRE(s.end() == std::end(arr));
     }
 
-    SECTION("fixed size") {
+    SECTION("fixed size")
+    {
         int arr[] = {1, 2, 3};
         span<int, 3> s(arr, 3);
 
@@ -73,9 +79,11 @@ TEST_CASE("(pointer, pointer) construction")
     static_assert(std::is_constructible<span<int>, int*, int*>::value, "");
     static_assert(!std::is_constructible<span<int>, float*, float*>::value, "");
     static_assert(std::is_constructible<span<int, 42>, int*, int*>::value, "");
-    static_assert(!std::is_constructible<span<int, 42>, float*, float*>::value, "");
+    static_assert(!std::is_constructible<span<int, 42>, float*, float*>::value,
+                  "");
 
-    SECTION("dynamic size") {
+    SECTION("dynamic size")
+    {
         int arr[] = {1, 2, 3};
         span<int> s{arr, arr + 3};
         REQUIRE(s.size() == 3);
@@ -84,7 +92,8 @@ TEST_CASE("(pointer, pointer) construction")
         REQUIRE(s.end() == std::end(arr));
     }
 
-    SECTION("fixed size") {
+    SECTION("fixed size")
+    {
         int arr[] = {1, 2, 3};
         span<int, 3> s{arr, arr + 3};
         REQUIRE(s.size() == 3);
@@ -97,33 +106,56 @@ TEST_CASE("(pointer, pointer) construction")
 TEST_CASE("C array construction")
 {
     using int_array_t = int[3];
-    using float_array_t = float [3];
+    using float_array_t = float[3];
 
-    static_assert(std::is_nothrow_constructible<span<int>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int>, int_array_t const&>::value, "");
+    static_assert(std::is_nothrow_constructible<span<int>, int_array_t&>::value,
+                  "");
+    static_assert(!std::is_constructible<span<int>, int_array_t const&>::value,
+                  "");
     static_assert(!std::is_constructible<span<int>, float_array_t>::value, "");
 
-    static_assert(std::is_nothrow_constructible<span<const int>, int_array_t&>::value, "");
-    static_assert(std::is_nothrow_constructible<span<const int>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<const int>, float_array_t>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<span<const int>, int_array_t&>::value,
+        "");
+    static_assert(std::is_nothrow_constructible<span<const int>,
+                                                int_array_t const&>::value,
+                  "");
+    static_assert(!std::is_constructible<span<const int>, float_array_t>::value,
+                  "");
 
-    static_assert(std::is_nothrow_constructible<span<int, 3>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int, 3>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<int, 3>, float_array_t&>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<span<int, 3>, int_array_t&>::value, "");
+    static_assert(
+        !std::is_constructible<span<int, 3>, int_array_t const&>::value, "");
+    static_assert(!std::is_constructible<span<int, 3>, float_array_t&>::value,
+                  "");
 
-    static_assert(std::is_nothrow_constructible<span<const int, 3>, int_array_t&>::value, "");
-    static_assert(std::is_nothrow_constructible<span<const int, 3>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<const int, 3>, float_array_t>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<span<const int, 3>, int_array_t&>::value,
+        "");
+    static_assert(std::is_nothrow_constructible<span<const int, 3>,
+                                                int_array_t const&>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<span<const int, 3>, float_array_t>::value, "");
 
-    static_assert(!std::is_constructible<span<int, 42>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int, 42>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<int, 42>, float_array_t&>::value, "");
+    static_assert(!std::is_constructible<span<int, 42>, int_array_t&>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<span<int, 42>, int_array_t const&>::value, "");
+    static_assert(!std::is_constructible<span<int, 42>, float_array_t&>::value,
+                  "");
 
-    static_assert(!std::is_constructible<span<const int, 42>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<const int, 42>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<const int, 42>, float_array_t&>::value, "");
+    static_assert(
+        !std::is_constructible<span<const int, 42>, int_array_t&>::value, "");
+    static_assert(
+        !std::is_constructible<span<const int, 42>, int_array_t const&>::value,
+        "");
+    static_assert(
+        !std::is_constructible<span<const int, 42>, float_array_t&>::value, "");
 
-    SECTION("non-const, dynamic size") {
+    SECTION("non-const, dynamic size")
+    {
         int arr[] = {1, 2, 3};
         span<int> s{arr};
         REQUIRE(s.size() == 3);
@@ -132,7 +164,8 @@ TEST_CASE("C array construction")
         REQUIRE(s.end() == std::end(arr));
     }
 
-    SECTION("const, dynamic size") {
+    SECTION("const, dynamic size")
+    {
         int arr[] = {1, 2, 3};
         span<int const> s{arr};
         REQUIRE(s.size() == 3);
@@ -141,8 +174,8 @@ TEST_CASE("C array construction")
         REQUIRE(s.end() == std::end(arr));
     }
 
-
-    SECTION("non-const, static size") {
+    SECTION("non-const, static size")
+    {
         int arr[] = {1, 2, 3};
         span<int, 3> s{arr};
         REQUIRE(s.size() == 3);
@@ -151,7 +184,8 @@ TEST_CASE("C array construction")
         REQUIRE(s.end() == std::end(arr));
     }
 
-    SECTION("const, dynamic size") {
+    SECTION("const, dynamic size")
+    {
         int arr[] = {1, 2, 3};
         span<int const, 3> s{arr};
         REQUIRE(s.size() == 3);
@@ -167,41 +201,73 @@ TEST_CASE("std::array construction")
     using float_array_t = std::array<float, 3>;
     using zero_array_t = std::array<int, 0>;
 
-    static_assert(std::is_nothrow_constructible<span<int>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int>, int_array_t const&>::value, "");
+    static_assert(std::is_nothrow_constructible<span<int>, int_array_t&>::value,
+                  "");
+    static_assert(!std::is_constructible<span<int>, int_array_t const&>::value,
+                  "");
     static_assert(!std::is_constructible<span<int>, float_array_t>::value);
 
-    static_assert(std::is_nothrow_constructible<span<const int>, int_array_t&>::value, "");
-    static_assert(std::is_nothrow_constructible<span<const int>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<const int>, float_array_t const&>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<span<const int>, int_array_t&>::value,
+        "");
+    static_assert(std::is_nothrow_constructible<span<const int>,
+                                                int_array_t const&>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<span<const int>, float_array_t const&>::value,
+        "");
 
-    static_assert(std::is_nothrow_constructible<span<int, 3>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int, 3>, int_array_t const&>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<span<int, 3>, int_array_t&>::value, "");
+    static_assert(
+        !std::is_constructible<span<int, 3>, int_array_t const&>::value, "");
     static_assert(!std::is_constructible<span<int, 3>, float_array_t>::value);
 
-    static_assert(std::is_nothrow_constructible<span<const int, 3>, int_array_t&>::value, "");
-    static_assert(std::is_nothrow_constructible<span<const int, 3>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<const int, 3>, float_array_t const&>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<span<const int, 3>, int_array_t&>::value,
+        "");
+    static_assert(std::is_nothrow_constructible<span<const int, 3>,
+                                                int_array_t const&>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<span<const int, 3>, float_array_t const&>::value,
+        "");
 
-    static_assert(!std::is_constructible<span<int, 42>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int, 42>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<int, 42>, float_array_t const&>::value, "");
+    static_assert(!std::is_constructible<span<int, 42>, int_array_t&>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<span<int, 42>, int_array_t const&>::value, "");
+    static_assert(
+        !std::is_constructible<span<int, 42>, float_array_t const&>::value, "");
 
-    static_assert(!std::is_constructible<span<const int, 42>, int_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<const int, 42>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<const int, 42>, float_array_t&>::value, "");
+    static_assert(
+        !std::is_constructible<span<const int, 42>, int_array_t&>::value, "");
+    static_assert(
+        !std::is_constructible<span<const int, 42>, int_array_t const&>::value,
+        "");
+    static_assert(
+        !std::is_constructible<span<const int, 42>, float_array_t&>::value, "");
 
     static_assert(std::is_constructible<span<int>, zero_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int>, const zero_array_t&>::value, "");
-    static_assert(std::is_constructible<span<const int>, zero_array_t&>::value, "");
-    static_assert(std::is_constructible<span<const int>, const zero_array_t&>::value, "");
+    static_assert(!std::is_constructible<span<int>, const zero_array_t&>::value,
+                  "");
+    static_assert(std::is_constructible<span<const int>, zero_array_t&>::value,
+                  "");
+    static_assert(
+        std::is_constructible<span<const int>, const zero_array_t&>::value, "");
 
-    static_assert(std::is_constructible<span<int, 0>, zero_array_t&>::value, "");
-    static_assert(!std::is_constructible<span<int, 0>, const zero_array_t&>::value, "");
-    static_assert(std::is_constructible<span<const int, 0>, zero_array_t&>::value, "");
-    static_assert(std::is_constructible<span<const int, 0>, const zero_array_t&>::value, "");
+    static_assert(std::is_constructible<span<int, 0>, zero_array_t&>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<span<int, 0>, const zero_array_t&>::value, "");
+    static_assert(
+        std::is_constructible<span<const int, 0>, zero_array_t&>::value, "");
+    static_assert(
+        std::is_constructible<span<const int, 0>, const zero_array_t&>::value,
+        "");
 
-    SECTION("non-const, dynamic size") {
+    SECTION("non-const, dynamic size")
+    {
         int_array_t arr = {1, 2, 3};
         span<int> s{arr};
         REQUIRE(s.size() == 3);
@@ -210,7 +276,8 @@ TEST_CASE("std::array construction")
         REQUIRE(s.end() == arr.data() + 3);
     }
 
-    SECTION("const, dynamic size") {
+    SECTION("const, dynamic size")
+    {
         int_array_t arr = {1, 2, 3};
         span<int const> s{arr};
         REQUIRE(s.size() == 3);
@@ -219,8 +286,8 @@ TEST_CASE("std::array construction")
         REQUIRE(s.end() == arr.data() + 3);
     }
 
-
-    SECTION("non-const, static size") {
+    SECTION("non-const, static size")
+    {
         int_array_t arr = {1, 2, 3};
         span<int, 3> s{arr};
         REQUIRE(s.size() == 3);
@@ -229,7 +296,8 @@ TEST_CASE("std::array construction")
         REQUIRE(s.end() == arr.data() + 3);
     }
 
-    SECTION("const, dynamic size") {
+    SECTION("const, dynamic size")
+    {
         int_array_t arr = {1, 2, 3};
         span<int const, 3> s{arr};
         REQUIRE(s.size() == 3);
@@ -249,18 +317,25 @@ TEST_CASE("Construction from other containers")
     static_assert(!std::is_constructible<span<int>, const deque_t&>::value, "");
 
     static_assert(std::is_constructible<span<const int>, vec_t&>::value, "");
-    static_assert(std::is_constructible<span<const int>, const vec_t&>::value, "");
-    static_assert(!std::is_constructible<span<const int>, const deque_t&>::value, "");
+    static_assert(std::is_constructible<span<const int>, const vec_t&>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<span<const int>, const deque_t&>::value, "");
 
     static_assert(std::is_constructible<span<int, 3>, vec_t&>::value, "");
-    static_assert(!std::is_constructible<span<int, 3>, const vec_t&>::value, "");
-    static_assert(!std::is_constructible<span<int, 3>, const deque_t&>::value, "");
+    static_assert(!std::is_constructible<span<int, 3>, const vec_t&>::value,
+                  "");
+    static_assert(!std::is_constructible<span<int, 3>, const deque_t&>::value,
+                  "");
 
     static_assert(std::is_constructible<span<const int, 3>, vec_t&>::value, "");
-    static_assert(std::is_constructible<span<const int, 3>, const vec_t&>::value, "");
-    static_assert(!std::is_constructible<span<const int, 3>, const deque_t&>::value, "");
+    static_assert(
+        std::is_constructible<span<const int, 3>, const vec_t&>::value, "");
+    static_assert(
+        !std::is_constructible<span<const int, 3>, const deque_t&>::value, "");
 
-    SECTION("non-const, dynamic size") {
+    SECTION("non-const, dynamic size")
+    {
         vec_t arr = {1, 2, 3};
         span<int> s{arr};
         REQUIRE(s.size() == 3);
@@ -269,7 +344,8 @@ TEST_CASE("Construction from other containers")
         REQUIRE(s.end() == arr.data() + 3);
     }
 
-    SECTION("const, dynamic size") {
+    SECTION("const, dynamic size")
+    {
         vec_t arr = {1, 2, 3};
         span<int const> s{arr};
         REQUIRE(s.size() == 3);
@@ -278,8 +354,8 @@ TEST_CASE("Construction from other containers")
         REQUIRE(s.end() == arr.data() + 3);
     }
 
-
-    SECTION("non-const, static size") {
+    SECTION("non-const, static size")
+    {
         vec_t arr = {1, 2, 3};
         span<int, 3> s{arr};
         REQUIRE(s.size() == 3);
@@ -288,7 +364,8 @@ TEST_CASE("Construction from other containers")
         REQUIRE(s.end() == arr.data() + 3);
     }
 
-    SECTION("const, dynamic size") {
+    SECTION("const, dynamic size")
+    {
         vec_t arr = {1, 2, 3};
         span<int const, 3> s{arr};
         REQUIRE(s.size() == 3);
@@ -309,19 +386,26 @@ TEST_CASE("construction from spans of different size")
 
     static_assert(std::is_trivially_copyable<zero_span>::value, "");
     static_assert(std::is_trivially_move_constructible<zero_span>::value, "");
-    static_assert(!std::is_constructible<zero_span, zero_const_span>::value, "");
+    static_assert(!std::is_constructible<zero_span, zero_const_span>::value,
+                  "");
     static_assert(!std::is_constructible<zero_span, big_span>::value, "");
     static_assert(!std::is_constructible<zero_span, big_const_span>::value, "");
     static_assert(!std::is_constructible<zero_span, dynamic_span>::value, "");
-    static_assert(!std::is_constructible<zero_span, dynamic_const_span>::value, "");
+    static_assert(!std::is_constructible<zero_span, dynamic_const_span>::value,
+                  "");
 
-    static_assert(std::is_nothrow_constructible<zero_const_span, zero_span>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<zero_const_span, zero_span>::value, "");
     static_assert(std::is_trivially_copyable<zero_const_span>::value, "");
-    static_assert(std::is_trivially_move_constructible<zero_const_span>::value, "");
+    static_assert(std::is_trivially_move_constructible<zero_const_span>::value,
+                  "");
     static_assert(!std::is_constructible<zero_const_span, big_span>::value, "");
-    static_assert(!std::is_constructible<zero_const_span, big_const_span>::value, "");
-    static_assert(!std::is_constructible<zero_const_span, dynamic_span>::value, "");
-    static_assert(!std::is_constructible<zero_const_span, dynamic_const_span>::value, "");
+    static_assert(
+        !std::is_constructible<zero_const_span, big_const_span>::value, "");
+    static_assert(!std::is_constructible<zero_const_span, dynamic_span>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<zero_const_span, dynamic_const_span>::value, "");
 
     static_assert(!std::is_constructible<big_span, zero_span>::value, "");
     static_assert(!std::is_constructible<big_span, zero_const_span>::value, "");
@@ -329,31 +413,53 @@ TEST_CASE("construction from spans of different size")
     static_assert(std::is_trivially_move_constructible<big_span>::value, "");
     static_assert(!std::is_constructible<big_span, big_const_span>::value, "");
     static_assert(!std::is_constructible<big_span, dynamic_span>::value, "");
-    static_assert(!std::is_constructible<big_span, dynamic_const_span>::value, "");
+    static_assert(!std::is_constructible<big_span, dynamic_const_span>::value,
+                  "");
 
     static_assert(!std::is_constructible<big_const_span, zero_span>::value, "");
-    static_assert(!std::is_constructible<big_const_span, zero_const_span>::value, "");
+    static_assert(
+        !std::is_constructible<big_const_span, zero_const_span>::value, "");
     static_assert(std::is_trivially_copyable<big_const_span>::value, "");
-    static_assert(std::is_trivially_move_constructible<big_const_span>::value, "");
-    static_assert(std::is_nothrow_constructible<big_const_span, big_span>::value, "");
-    static_assert(!std::is_constructible<big_const_span, dynamic_span>::value, "");
-    static_assert(!std::is_constructible<big_const_span, dynamic_const_span>::value, "");
+    static_assert(std::is_trivially_move_constructible<big_const_span>::value,
+                  "");
+    static_assert(
+        std::is_nothrow_constructible<big_const_span, big_span>::value, "");
+    static_assert(!std::is_constructible<big_const_span, dynamic_span>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<big_const_span, dynamic_const_span>::value, "");
 
-    static_assert(std::is_nothrow_constructible<dynamic_span, zero_span>::value, "");
-    static_assert(!std::is_constructible<dynamic_span, zero_const_span>::value, "");
-    static_assert(std::is_nothrow_constructible<dynamic_span, big_span>::value, "");
-    static_assert(!std::is_constructible<dynamic_span, big_const_span>::value, "");
+    static_assert(std::is_nothrow_constructible<dynamic_span, zero_span>::value,
+                  "");
+    static_assert(!std::is_constructible<dynamic_span, zero_const_span>::value,
+                  "");
+    static_assert(std::is_nothrow_constructible<dynamic_span, big_span>::value,
+                  "");
+    static_assert(!std::is_constructible<dynamic_span, big_const_span>::value,
+                  "");
     static_assert(std::is_trivially_copyable<dynamic_span>::value, "");
-    static_assert(std::is_trivially_move_constructible<dynamic_span>::value, "");
-    static_assert(!std::is_constructible<dynamic_span, dynamic_const_span>::value, "");
+    static_assert(std::is_trivially_move_constructible<dynamic_span>::value,
+                  "");
+    static_assert(
+        !std::is_constructible<dynamic_span, dynamic_const_span>::value, "");
 
-    static_assert(std::is_nothrow_constructible<dynamic_const_span, zero_span>::value, "");
-    static_assert(std::is_nothrow_constructible<dynamic_const_span, zero_const_span>::value, "");
-    static_assert(std::is_nothrow_constructible<dynamic_const_span, big_span>::value, "");
-    static_assert(std::is_nothrow_constructible<dynamic_const_span, big_const_span>::value, "");
-    static_assert(std::is_nothrow_constructible<dynamic_const_span, dynamic_span>::value, "");
+    static_assert(
+        std::is_nothrow_constructible<dynamic_const_span, zero_span>::value,
+        "");
+    static_assert(std::is_nothrow_constructible<dynamic_const_span,
+                                                zero_const_span>::value,
+                  "");
+    static_assert(
+        std::is_nothrow_constructible<dynamic_const_span, big_span>::value, "");
+    static_assert(std::is_nothrow_constructible<dynamic_const_span,
+                                                big_const_span>::value,
+                  "");
+    static_assert(
+        std::is_nothrow_constructible<dynamic_const_span, dynamic_span>::value,
+        "");
     static_assert(std::is_trivially_copyable<dynamic_const_span>::value, "");
-    static_assert(std::is_trivially_move_constructible<dynamic_const_span>::value, "");
+    static_assert(
+        std::is_trivially_move_constructible<dynamic_const_span>::value, "");
 
     constexpr zero_const_span s0{};
     constexpr dynamic_const_span d{s0};
@@ -365,7 +471,8 @@ TEST_CASE("construction from spans of different size")
 
 TEST_CASE("member subview operations")
 {
-    SECTION("first<N>") {
+    SECTION("first<N>")
+    {
         int arr[] = {1, 2, 3, 4, 5};
         span<int, 5> s{arr};
         auto f = s.first<3>();
@@ -377,7 +484,8 @@ TEST_CASE("member subview operations")
         REQUIRE(f.end() == arr + 3);
     }
 
-    SECTION("last<N>") {
+    SECTION("last<N>")
+    {
         int arr[] = {1, 2, 3, 4, 5};
         span<int, 5> s{arr};
         auto l = s.last<3>();
@@ -389,7 +497,8 @@ TEST_CASE("member subview operations")
         REQUIRE(l.end() == std::end(arr));
     }
 
-    SECTION("subspan<N>") {
+    SECTION("subspan<N>")
+    {
         int arr[] = {1, 2, 3, 4, 5};
         span<int, 5> s{arr};
         auto ss = s.subspan<1, 2>();
@@ -401,7 +510,8 @@ TEST_CASE("member subview operations")
         REQUIRE(ss.end() == arr + 1 + 2);
     }
 
-    SECTION("first(n)") {
+    SECTION("first(n)")
+    {
         int arr[] = {1, 2, 3, 4, 5};
         span<int, 5> s{arr};
         auto f = s.first(3);
@@ -413,7 +523,8 @@ TEST_CASE("member subview operations")
         REQUIRE(f.end() == arr + 3);
     }
 
-    SECTION("last(n)") {
+    SECTION("last(n)")
+    {
         int arr[] = {1, 2, 3, 4, 5};
         span<int, 5> s{arr};
         auto l = s.last(3);
@@ -425,7 +536,8 @@ TEST_CASE("member subview operations")
         REQUIRE(l.end() == std::end(arr));
     }
 
-    SECTION("subspan(n)") {
+    SECTION("subspan(n)")
+    {
         int arr[] = {1, 2, 3, 4, 5};
         span<int, 5> s{arr};
         auto ss = s.subspan(1, 2);
@@ -518,5 +630,4 @@ TEST_CASE("nonmember first<N>()")
         REQUIRE(s.begin() == vec.data());
         REQUIRE(s.end() == vec.data() + 3);
     }
-
 }
