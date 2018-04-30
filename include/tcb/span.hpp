@@ -728,13 +728,13 @@ constexpr auto get(span<E, S> s) -> decltype(s[N])
 
 namespace std {
 
-template <typename E, std::ptrdiff_t S>
-struct tuple_size<tcb::span<E, S>> : integral_constant<std::size_t, S> {};
+template <typename E, ptrdiff_t S>
+struct tuple_size<tcb::span<E, S>> : integral_constant<size_t, S> {};
 
 template <typename E>
 class tuple_size<tcb::span<E, tcb::dynamic_extent>>; // not defined
 
-template <std::size_t N, typename E, std::ptrdiff_t S>
+template <size_t N, typename E, ptrdiff_t S>
 struct tuple_element<N, tcb::span<E, S>> {
     using type = E&;
 };
