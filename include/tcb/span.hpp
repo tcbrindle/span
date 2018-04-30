@@ -205,8 +205,8 @@ struct has_size_and_data : std::false_type {};
 
 template <typename T>
 struct has_size_and_data<T, void_t<
-    decltype(size(std::declval<T>())),
-    decltype(data(std::declval<T>()))>>
+    decltype(detail::size(std::declval<T>())),
+    decltype(detail::data(std::declval<T>()))>>
     : std::true_type {};
 
 template <typename C, typename U = uncvref_t<C>>
@@ -225,9 +225,9 @@ template <typename, typename, typename = void>
 struct is_container_element_type_compatible : std::false_type {};
 
 template <typename T, typename E>
-struct is_container_element_type_compatible<T, E, void_t<decltype(data(std::declval<T>()))>>
+struct is_container_element_type_compatible<T, E, void_t<decltype(detail::data(std::declval<T>()))>>
         : std::is_convertible<
-                remove_pointer_t<decltype(data(std::declval<T>()))>(*)[],
+                remove_pointer_t<decltype(detail::data(std::declval<T>()))>(*)[],
                 E(*)[]> {};
 
 }
