@@ -493,13 +493,13 @@ constexpr span<T, N> make_span(T (&arr)[N]) noexcept
 }
 
 template <typename T, std::size_t N>
-TCB_SPAN_CONSTEXPR14 span<T, N> make_span(std::array<T, N>& arr) noexcept
+TCB_SPAN_ARRAY_CONSTEXPR span<T, N> make_span(std::array<T, N>& arr) noexcept
 {
     return {arr};
 }
 
 template <typename T, std::size_t N>
-TCB_SPAN_CONSTEXPR14 span<const T, N>
+TCB_SPAN_ARRAY_CONSTEXPR span<const T, N>
 make_span(const std::array<T, N>& arr) noexcept
 {
     return {arr};
