@@ -11,8 +11,7 @@ It differs from the implementation in the [Microsoft GSL](https://github.com/Mic
 in that it is single-header and does not depend on any other GSL facilities. It
 also works with C++11, while the GSL version requires C++14. Finally, it provides
 various extensions (detailed below) which are currently not part of the
-specification. However, unlike the GSL version it does not perform any bounds
-checking at present; see Implementation Notes below.
+standard specification.
 
 Usage
 -----
@@ -30,10 +29,33 @@ use.
 Implementation Notes
 --------------------
 
-At present, this implementation of `span` does not provide any bounds checking
-(other than the `at()` extension; see below). This is conforming according to
-the current wording. Bounds checking may be added in a future version, but will
-be disabled by default in release builds.
+### Bounds Checking ###
+
+This implementation of `span` includes optional bounds checking, which is handled
+either by throwing an exception or by calling `std::terminate()`.
+
+The default behaviour with C++14 and later is to check the macro `NDEBUG`:
+if this is set, bounds checking is disabled. Otherwise, `std::terminate()` will
+be called if there is a precondition violation (i.e. the same behaviour as
+`assert()`). If you wish to terminate on errors even if `NDEBUG` is set, define
+the symbol `TCB_SPAN_TERMINATE_ON_CONTRACT_VIOLATION` before `#include`-ing the
+header.
+
+Alternatively, if you want to throw on a contract violation, define
+`TCB_SPAN_THROW_ON_CONTRACT_VIOLATION`. This will throw an exception of an
+implementation-defined type (deriving from `std::logic_error`), allowing
+cleanup to happen. Note that defining this symbol will cause the checks to be
+run even if `NDEBUG` is set.
+
+Lastly, if you wish to disable contract checking even in debug builds,
+`#define TCB_SPAN_NO_CONTRACT_CHECKING`.
+
+Under C++11, due to the restrictions on `constexpr` functions, contract checking
+is disabled by default even if `NDEBUG` is not set. You can change this by
+defining either of the above symbols, but this will result in most of `span`'s
+interface becoming non-`constexpr`.
+
+### `constexpr` ###
 
 This implementation is fully `constexpr` under C++17 and later. Under earlier
 versions, it is "as `constexpr` as possible".
