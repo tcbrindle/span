@@ -1,0 +1,22 @@
+
+ColumnLimit: 80
+
+UseTab: Never
+IndentWidth: 4
+AccessModifierOffset: -4
+
+AlignConsecutiveAssignments: false
+AllowShortFunctionsOnASingleLine: Inline
+AlwaysBreakTemplateDeclarations: true
+BreakBeforeBraces: Custom
+BreakConstructorInitializers: BeforeColon
+BraceWrapping:
+    AfterFunction: true
+    SplitEmptyFunction: false
+    SplitEmptyRecord: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+Cpp11BracedListStyle: true
+DerivePointerAlignment: true
+NamespaceIndentation: None
+FixNamespaceComments: true
+SpaceAfterCStyleCast: true
