@@ -31,7 +31,7 @@ Implementation Notes
 --------------------
 
 At present, this implementation of `span` does not provide any bounds checking
-(other than the `at()` extention; see below). This is conforming according to
+(other than the `at()` extension; see below). This is conforming according to
 the current wording. Bounds checking may be added in a future version, but will
 be disabled by default in release builds.
 
@@ -61,7 +61,7 @@ Constructor deduction guides are provided if the compiler supports them. For
 older compilers, a `make_span()` function is provided as an extension
 which uses the same logic.
 
-Extentions
+Extensions
 ----------
 
 This implementation provides several extensions to the current specification.
