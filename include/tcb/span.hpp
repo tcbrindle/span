@@ -44,11 +44,11 @@ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf
 #define TCB_SPAN_DEPRECATED_FOR(msg)
 #endif
 
-#if __cplusplus >= 201703L
+#if __cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)
 #define TCB_SPAN_HAVE_CPP17
 #endif
 
-#if __cplusplus >= 201402L
+#if __cplusplus >= 201402L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201402L)
 #define TCB_SPAN_HAVE_CPP14
 #endif
 
