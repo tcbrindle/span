@@ -18,7 +18,7 @@ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf
 
 #ifndef TCB_SPAN_NO_EXCEPTIONS
 // Attempt to discover whether we're being compiled with exception support
-#if !(defined(__cpp_exceptions) || defined(__EXCEPTIONS))
+#if !(defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND))
 #define TCB_SPAN_NO_EXCEPTIONS
 #endif
 #endif
