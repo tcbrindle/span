@@ -24,17 +24,26 @@ TEST_CASE("default construction")
     SECTION("dynamic size")
     {
         constexpr span<int> s{};
-        static_assert(s.begin() == s.end());
         static_assert(s.size() == 0, "");
         static_assert(s.data() == nullptr, "");
+        // This causes an ICE on MSVC
+#ifndef _MSC_VER
+        static_assert(s.begin() == s.end(), "");
+#else
+        REQUIRE(s.begin() == s.end());
+#endif
     }
 
     SECTION("fixed size")
     {
         constexpr span<int, 0> s{};
-        static_assert(s.begin() == s.end());
         static_assert(s.size() == 0, "");
         static_assert(s.data() == nullptr, "");
+#ifndef _MSC_VER
+        static_assert(s.begin() == s.end(), "");
+#else
+        REQUIRE(s.begin() == s.end());
+#endif
     }
 }
 
@@ -464,9 +473,13 @@ TEST_CASE("construction from spans of different size")
     constexpr zero_const_span s0{};
     constexpr dynamic_const_span d{s0};
 
-    static_assert(d.begin() == d.end());
     static_assert(d.size() == 0, "");
     static_assert(d.data() == nullptr, "");
+#ifndef _MSC_VER
+    static_assert(d.begin() == d.end(), "");
+#else
+    REQUIRE(d.begin() == d.end());
+#endif
 }
 
 TEST_CASE("member subview operations")
