@@ -230,7 +230,8 @@ TEST_CASE("std::array construction")
         std::is_nothrow_constructible<span<int, 3>, int_array_t&>::value, "");
     static_assert(
         !std::is_constructible<span<int, 3>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<int, 3>, float_array_t>::value, "");
+    static_assert(!std::is_constructible<span<int, 3>, float_array_t>::value,
+                  "");
 
     static_assert(
         std::is_nothrow_constructible<span<const int, 3>, int_array_t&>::value,

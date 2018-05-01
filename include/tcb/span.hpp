@@ -387,10 +387,11 @@ public:
     }
 
     template <std::ptrdiff_t Offset, std::ptrdiff_t Count = dynamic_extent>
-    using subspan_return_t = span<ElementType, Count != dynamic_extent
-                                                  ? Count
-                                                  : (Extent != dynamic_extent ? Extent - Offset
-                                                                              : dynamic_extent)>;
+    using subspan_return_t =
+        span<ElementType, Count != dynamic_extent
+                              ? Count
+                              : (Extent != dynamic_extent ? Extent - Offset
+                                                          : dynamic_extent)>;
 
     template <std::ptrdiff_t Offset, std::ptrdiff_t Count = dynamic_extent>
     TCB_SPAN_CONSTEXPR11 subspan_return_t<Offset, Count> subspan() const
