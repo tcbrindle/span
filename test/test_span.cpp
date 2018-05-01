@@ -205,7 +205,7 @@ TEST_CASE("std::array construction")
                   "");
     static_assert(!std::is_constructible<span<int>, int_array_t const&>::value,
                   "");
-    static_assert(!std::is_constructible<span<int>, float_array_t>::value);
+    static_assert(!std::is_constructible<span<int>, float_array_t>::value, "");
 
     static_assert(
         std::is_nothrow_constructible<span<const int>, int_array_t&>::value,
@@ -221,7 +221,7 @@ TEST_CASE("std::array construction")
         std::is_nothrow_constructible<span<int, 3>, int_array_t&>::value, "");
     static_assert(
         !std::is_constructible<span<int, 3>, int_array_t const&>::value, "");
-    static_assert(!std::is_constructible<span<int, 3>, float_array_t>::value);
+    static_assert(!std::is_constructible<span<int, 3>, float_array_t>::value, "");
 
     static_assert(
         std::is_nothrow_constructible<span<const int, 3>, int_array_t&>::value,
@@ -556,12 +556,12 @@ TEST_CASE("span observers")
 {
     // We already use this everywhere, but whatever
     constexpr span<int, 0> empty{};
-    static_assert(empty.size() == 0);
-    static_assert(empty.empty());
+    static_assert(empty.size() == 0, "");
+    static_assert(empty.empty(), "");
 
     constexpr int arr[] = {1, 2, 3};
-    static_assert(span<const int>{arr}.size() == 3);
-    static_assert(!span<const int>{arr}.empty());
+    static_assert(span<const int>{arr}.size() == 3, "");
+    static_assert(!span<const int>{arr}.empty(), "");
 }
 
 TEST_CASE("span element access")
