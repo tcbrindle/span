@@ -120,7 +120,7 @@ inline void contract_violation(const char* msg)
 #define TCB_SPAN_HAVE_CONSTEXPR_STD_ARRAY_ETC
 #endif
 
-#if defined(TCB_HAVE_CONSTEXPR_STD_ARRAY_ETC)
+#if defined(TCB_SPAN_HAVE_CONSTEXPR_STD_ARRAY_ETC)
 #define TCB_SPAN_ARRAY_CONSTEXPR constexpr
 #else
 #define TCB_SPAN_ARRAY_CONSTEXPR
