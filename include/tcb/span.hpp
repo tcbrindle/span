@@ -69,13 +69,16 @@ struct contract_violation_error : std::logic_error {
     {}
 };
 
-void contract_violation(const char* msg)
+inline void contract_violation(const char* msg)
 {
     throw contract_violation_error(msg);
 }
 
 #elif defined(TCB_SPAN_TERMINATE_ON_CONTRACT_VIOLATION)
-[[noreturn]] void contract_violation(const char* msg) { std::terminate(); }
+[[noreturn]] inline void contract_violation(const char* msg)
+{
+    std::terminate();
+}
 #endif
 
 #if !defined(TCB_SPAN_NO_CONTRACT_CHECKING)
@@ -128,7 +131,7 @@ namespace TCB_SPAN_NAMESPACE_NAME {
 #ifdef TCB_SPAN_HAVE_STD_BYTE
 using byte = std::byte;
 #else
-    using byte = unsigned char;
+using byte = unsigned char;
 #endif
 
 TCB_SPAN_INLINE_VAR constexpr std::ptrdiff_t dynamic_extent = -1;
@@ -168,48 +171,48 @@ struct span_storage<E, dynamic_extent> {
 using std::data;
 using std::size;
 #else
-    template <class C>
-    constexpr auto size(const C& c) -> decltype(c.size())
-    {
-        return c.size();
-    }
+template <class C>
+constexpr auto size(const C& c) -> decltype(c.size())
+{
+    return c.size();
+}
 
-    template <class T, std::size_t N>
-    constexpr std::size_t size(const T (&array)[N]) noexcept
-    {
-        return N;
-    }
+template <class T, std::size_t N>
+constexpr std::size_t size(const T (&array)[N]) noexcept
+{
+    return N;
+}
 
-    template <class C>
-    constexpr auto data(C& c) -> decltype(c.data())
-    {
-        return c.data();
-    }
+template <class C>
+constexpr auto data(C& c) -> decltype(c.data())
+{
+    return c.data();
+}
 
-    template <class C>
-    constexpr auto data(const C& c) -> decltype(c.data())
-    {
-        return c.data();
-    }
+template <class C>
+constexpr auto data(const C& c) -> decltype(c.data())
+{
+    return c.data();
+}
 
-    template <class T, std::size_t N>
-    constexpr T* data(T (&array)[N]) noexcept
-    {
-        return array;
-    }
+template <class T, std::size_t N>
+constexpr T* data(T (&array)[N]) noexcept
+{
+    return array;
+}
 
-    template <class E>
-    constexpr const E* data(std::initializer_list<E> il) noexcept
-    {
-        return il.begin();
-    }
+template <class E>
+constexpr const E* data(std::initializer_list<E> il) noexcept
+{
+    return il.begin();
+}
 #endif // TCB_SPAN_HAVE_CPP17
 
 #if defined(TCB_SPAN_HAVE_CPP17) || defined(__cpp_lib_void_t)
 using std::void_t;
 #else
-    template <typename...>
-    using void_t = void;
+template <typename...>
+using void_t = void;
 #endif
 
 template <typename T>
