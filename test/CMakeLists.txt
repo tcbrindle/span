@@ -7,6 +7,8 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /permissive-")
 endif()
 
+set(CMAKE_CXX_EXTENSIONS Off)
+
 add_executable(test_span11
     catch_main.cpp
     test_span.cpp
