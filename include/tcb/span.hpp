@@ -342,7 +342,7 @@ public:
         : storage_(detail::data(cont), detail::size(cont))
     {
         TCB_SPAN_EXPECT(extent == dynamic_extent ||
-                        detail::size(cont) == extent);
+                        static_cast<std::ptrdiff_t>(detail::size(cont)) == extent);
     }
 
     template <typename Container,
@@ -355,7 +355,7 @@ public:
         : storage_(detail::data(cont), detail::size(cont))
     {
         TCB_SPAN_EXPECT(extent == dynamic_extent ||
-                        detail::size(cont) == extent);
+                        static_cast<std::ptrdiff_t>(detail::size(cont)) == extent);
     }
 
     constexpr span(const span& other) noexcept = default;
@@ -401,7 +401,7 @@ public:
     {
         TCB_SPAN_EXPECT((Offset >= 0 && Offset <= size()) &&
                         (Count == dynamic_extent ||
-                         Count >= 0 && Offset + Count <= size()));
+                        (Count >= 0 && Offset + Count <= size())));
         return {data() + Offset,
                 Count != dynamic_extent
                     ? Count
@@ -428,7 +428,7 @@ public:
     {
         TCB_SPAN_EXPECT((offset >= 0 && offset <= size()) &&
                         (count == dynamic_extent ||
-                         count >= 0 && offset + count <= size()));
+                        (count >= 0 && offset + count <= size())));
         return {data() + offset,
                 count == dynamic_extent ? size() - offset : count};
     }
