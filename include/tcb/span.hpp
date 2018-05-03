@@ -759,7 +759,7 @@ class tuple_size<tcb::span<E, tcb::dynamic_extent>>; // not defined
 template <size_t N, typename E, ptrdiff_t S>
 class tuple_element<N, tcb::span<E, S>> {
 public:
-    using type = E&;
+    using type = E;
 };
 
 } // end namespace std
