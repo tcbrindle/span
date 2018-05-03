@@ -317,31 +317,34 @@ public:
                         last_elem - first_elem == extent);
     }
 
-    template <std::size_t N, std::ptrdiff_t E = Extent,
-              typename std::enable_if<
-                  (E == dynamic_extent || N == E) &&
-                      detail::is_container_element_type_compatible<
-                          element_type (&)[N], ElementType>::value,
-                  int>::type = 0>
+    template <
+        std::size_t N, std::ptrdiff_t E = Extent,
+        typename std::enable_if<
+            (E == dynamic_extent || static_cast<std::ptrdiff_t>(N) == E) &&
+                detail::is_container_element_type_compatible<
+                    element_type (&)[N], ElementType>::value,
+            int>::type = 0>
     constexpr span(element_type (&arr)[N]) noexcept : storage_(arr, N)
     {}
 
-    template <std::size_t N, std::ptrdiff_t E = Extent,
-              typename std::enable_if<
-                  (E == dynamic_extent || N == E) &&
-                      detail::is_container_element_type_compatible<
-                          std::array<value_type, N>&, ElementType>::value,
-                  int>::type = 0>
+    template <
+        std::size_t N, std::ptrdiff_t E = Extent,
+        typename std::enable_if<
+            (E == dynamic_extent || static_cast<std::ptrdiff_t>(N) == E) &&
+                detail::is_container_element_type_compatible<
+                    std::array<value_type, N>&, ElementType>::value,
+            int>::type = 0>
     TCB_SPAN_ARRAY_CONSTEXPR span(std::array<value_type, N>& arr) noexcept
         : storage_(arr.data(), N)
     {}
 
-    template <std::size_t N, std::ptrdiff_t E = Extent,
-              typename std::enable_if<
-                  (E == dynamic_extent || N == E) &&
-                      detail::is_container_element_type_compatible<
-                          const std::array<value_type, N>&, ElementType>::value,
-                  int>::type = 0>
+    template <
+        std::size_t N, std::ptrdiff_t E = Extent,
+        typename std::enable_if<
+            (E == dynamic_extent || static_cast<std::ptrdiff_t>(N) == E) &&
+                detail::is_container_element_type_compatible<
+                    const std::array<value_type, N>&, ElementType>::value,
+            int>::type = 0>
     TCB_SPAN_ARRAY_CONSTEXPR span(const std::array<value_type, N>& arr) noexcept
         : storage_(arr.data(), N)
     {}
