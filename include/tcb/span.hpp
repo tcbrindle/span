@@ -259,6 +259,12 @@ struct is_container_element_type_compatible<
           remove_pointer_t<decltype(detail::data(std::declval<T>()))> (*)[],
           E (*)[]> {};
 
+template <typename, typename = size_t>
+struct is_complete : std::false_type {};
+
+template <typename T>
+struct is_complete<T, decltype(sizeof(T))> : std::true_type {};
+
 } // namespace detail
 
 template <typename ElementType, std::ptrdiff_t Extent>
@@ -266,6 +272,14 @@ class span {
     static_assert(Extent == dynamic_extent || Extent >= 0,
                   "A span must have an extent greater than or equal to zero, "
                   "or a dynamic extent");
+    static_assert(std::is_object<ElementType>::value,
+                  "A span's ElementType must be an object type (not a "
+                  "reference type or void)");
+    static_assert(detail::is_complete<ElementType>::value,
+                  "A span's ElementType must be a complete type (not a forward "
+                  "declaration)");
+    static_assert(!std::is_abstract<ElementType>::value,
+                  "A span's ElementType cannot be an abstract class type");
 
     using storage_type = detail::span_storage<ElementType, Extent>;
 
@@ -342,7 +356,8 @@ public:
         : storage_(detail::data(cont), detail::size(cont))
     {
         TCB_SPAN_EXPECT(extent == dynamic_extent ||
-                        static_cast<std::ptrdiff_t>(detail::size(cont)) == extent);
+                        static_cast<std::ptrdiff_t>(detail::size(cont)) ==
+                            extent);
     }
 
     template <typename Container,
@@ -355,7 +370,8 @@ public:
         : storage_(detail::data(cont), detail::size(cont))
     {
         TCB_SPAN_EXPECT(extent == dynamic_extent ||
-                        static_cast<std::ptrdiff_t>(detail::size(cont)) == extent);
+                        static_cast<std::ptrdiff_t>(detail::size(cont)) ==
+                            extent);
     }
 
     constexpr span(const span& other) noexcept = default;
@@ -401,7 +417,7 @@ public:
     {
         TCB_SPAN_EXPECT((Offset >= 0 && Offset <= size()) &&
                         (Count == dynamic_extent ||
-                        (Count >= 0 && Offset + Count <= size())));
+                         (Count >= 0 && Offset + Count <= size())));
         return {data() + Offset,
                 Count != dynamic_extent
                     ? Count
@@ -428,7 +444,7 @@ public:
     {
         TCB_SPAN_EXPECT((offset >= 0 && offset <= size()) &&
                         (count == dynamic_extent ||
-                        (count >= 0 && offset + count <= size())));
+                         (count >= 0 && offset + count <= size())));
         return {data() + offset,
                 count == dynamic_extent ? size() - offset : count};
     }
