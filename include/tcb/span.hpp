@@ -75,7 +75,7 @@ inline void contract_violation(const char* msg)
 }
 
 #elif defined(TCB_SPAN_TERMINATE_ON_CONTRACT_VIOLATION)
-[[noreturn]] inline void contract_violation(const char* msg)
+[[noreturn]] inline void contract_violation(const char* /*unused*/)
 {
     std::terminate();
 }
@@ -178,7 +178,7 @@ constexpr auto size(const C& c) -> decltype(c.size())
 }
 
 template <class T, std::size_t N>
-constexpr std::size_t size(const T (&array)[N]) noexcept
+constexpr std::size_t size(const T (&)[N]) noexcept
 {
     return N;
 }
