@@ -645,3 +645,54 @@ TEST_CASE("nonmember first<N>()")
         REQUIRE(s.end() == vec.data() + 3);
     }
 }
+
+TEST_CASE("make_span()")
+{
+    {
+        int arr[3] = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
+        REQUIRE(s.data() == arr);
+        REQUIRE(s.size() == 3);
+    }
+
+    {
+        const int arr[3] = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
+        REQUIRE(s.data() == arr);
+        REQUIRE(s.size() == 3);
+    }
+
+    {
+        std::array<int, 3> arr = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
+        REQUIRE(s.data() == arr.data());
+        REQUIRE(s.size() == arr.size());
+    }
+
+    {
+        const std::array<int, 3> arr = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
+        REQUIRE(s.data() == arr.data());
+        REQUIRE(s.size() == 3);
+    }
+
+    {
+        std::vector<int> arr = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<int>>::value, "");
+        REQUIRE(s.data() == arr.data());
+        REQUIRE(s.size() == arr.size());
+    }
+
+    {
+        const std::vector<int> arr = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<const int>>::value, "");
+        REQUIRE(s.data() == arr.data());
+        REQUIRE(s.size() == arr.size());
+    }
+}
