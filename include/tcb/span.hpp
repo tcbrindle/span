@@ -690,47 +690,47 @@ as_writable_bytes(span<ElementType, Extent> s) noexcept
 #ifndef TCB_SPAN_STD_COMPLIANT_MODE
 
 template <std::ptrdiff_t Count, typename T>
-TCB_SPAN_CONSTEXPR11 auto first(T&& t)
-    -> decltype(make_span(std::forward<T>(t)).template first<Count>())
+TCB_SPAN_CONSTEXPR11 auto first(T& t)
+    -> decltype(make_span(t).template first<Count>())
 {
-    return make_span(std::forward<T>(t)).template first<Count>();
+    return make_span(t).template first<Count>();
 }
 
 template <std::ptrdiff_t Count, typename T>
-TCB_SPAN_CONSTEXPR11 auto last(T&& t)
-    -> decltype(make_span(std::forward<T>(t)).template last<Count>())
+TCB_SPAN_CONSTEXPR11 auto last(T& t)
+    -> decltype(make_span(t).template last<Count>())
 {
-    return make_span(std::forward<T>(t)).template last<Count>();
+    return make_span(t).template last<Count>();
 }
 
 template <std::ptrdiff_t Offset, std::ptrdiff_t Count = dynamic_extent,
           typename T>
-TCB_SPAN_CONSTEXPR11 auto subspan(T&& t)
-    -> decltype(make_span(std::forward<T>(t)).template subspan<Offset, Count>())
+TCB_SPAN_CONSTEXPR11 auto subspan(T& t)
+    -> decltype(make_span(t).template subspan<Offset, Count>())
 {
-    return make_span(std::forward<T>(t)).template subspan<Offset, Count>();
+    return make_span(t).template subspan<Offset, Count>();
 }
 
 template <typename T>
-TCB_SPAN_CONSTEXPR11 auto first(T&& t, std::ptrdiff_t count)
-    -> decltype(make_span(std::forward<T>(t)).first(count))
+TCB_SPAN_CONSTEXPR11 auto first(T& t, std::ptrdiff_t count)
+    -> decltype(make_span(t).first(count))
 {
-    return make_span(std::forward<T>(t)).first(count);
+    return make_span(t).first(count);
 }
 
 template <typename T>
-TCB_SPAN_CONSTEXPR11 auto last(T&& t, std::ptrdiff_t count)
-    -> decltype(make_span(std::forward<T>(t)).last(count))
+TCB_SPAN_CONSTEXPR11 auto last(T& t, std::ptrdiff_t count)
+    -> decltype(make_span(t).last(count))
 {
-    return make_span(std::forward<T>(t)).last(count);
+    return make_span(t).last(count);
 }
 
 template <typename T>
-TCB_SPAN_CONSTEXPR11 auto subspan(T&& t, std::ptrdiff_t offset,
+TCB_SPAN_CONSTEXPR11 auto subspan(T& t, std::ptrdiff_t offset,
                                   std::ptrdiff_t count = dynamic_extent)
-    -> decltype(make_span(std::forward<T>(t)).subspan(offset, count))
+    -> decltype(make_span(t).subspan(offset, count))
 {
-    return make_span(std::forward<T>(t)).subspan(offset, count);
+    return make_span(t).subspan(offset, count);
 }
 
 #endif // TCB_SPAN_STD_COMPLIANT_MODE

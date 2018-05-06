@@ -618,6 +618,18 @@ TEST_CASE("nonmember first<N>()")
     {
         int arr[] = {1, 2, 3, 4, 5};
         auto s = tcb::first<3>(arr);
+        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
+
+        REQUIRE(s.size() == 3);
+        REQUIRE(s.data() == arr);
+        REQUIRE(s.begin() == arr);
+        REQUIRE(s.end() == arr + 3);
+    }
+
+    {
+        const int arr[] = {1, 2, 3, 4, 5};
+        auto s = tcb::first<3>(arr);
+        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
 
         REQUIRE(s.size() == 3);
         REQUIRE(s.data() == arr);
@@ -628,6 +640,18 @@ TEST_CASE("nonmember first<N>()")
     {
         std::array<int, 5> arr = {1, 2, 3, 4, 5};
         auto s = tcb::first<3>(arr);
+        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
+
+        REQUIRE(s.size() == 3);
+        REQUIRE(s.data() == arr.data());
+        REQUIRE(s.begin() == arr.data());
+        REQUIRE(s.end() == arr.data() + 3);
+    }
+
+    {
+        const std::array<int, 5> arr = {1, 2, 3, 4, 5};
+        auto s = tcb::first<3>(arr);
+        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
 
         REQUIRE(s.size() == 3);
         REQUIRE(s.data() == arr.data());
@@ -638,6 +662,18 @@ TEST_CASE("nonmember first<N>()")
     {
         std::vector<int> vec = {1, 2, 3, 4, 5};
         auto s = tcb::first<3>(vec);
+        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
+
+        REQUIRE(s.size() == 3);
+        REQUIRE(s.data() == vec.data());
+        REQUIRE(s.begin() == vec.data());
+        REQUIRE(s.end() == vec.data() + 3);
+    }
+
+    {
+        const std::vector<int> vec = {1, 2, 3, 4, 5};
+        auto s = tcb::first<3>(vec);
+        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
 
         REQUIRE(s.size() == 3);
         REQUIRE(s.data() == vec.data());
