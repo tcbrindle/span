@@ -89,13 +89,13 @@ inline void contract_violation(const char* msg)
 #define TCB_SPAN_EXPECT(cond)
 #endif
 
-#if defined(TCB_HAVE_CPP17) || defined(__cpp_inline_variables)
+#if defined(TCB_SPAN_HAVE_CPP17) || defined(__cpp_inline_variables)
 #define TCB_SPAN_INLINE_VAR inline
 #else
 #define TCB_SPAN_INLINE_VAR
 #endif
 
-#if defined(TCB_HAVE_CPP14) ||                                                 \
+#if defined(TCB_SPAN_HAVE_CPP14) ||                                                 \
     (defined(__cpp_constexpr) && __cpp_constexpr >= 201304)
 #define TCB_SPAN_CONSTEXPR14 constexpr
 #else
@@ -108,15 +108,15 @@ inline void contract_violation(const char* msg)
 #define TCB_SPAN_CONSTEXPR11 TCB_SPAN_CONSTEXPR14
 #endif
 
-#if defined(TCB_HAVE_CPP17) || defined(__cpp_deduction_guides)
+#if defined(TCB_SPAN_HAVE_CPP17) || defined(__cpp_deduction_guides)
 #define TCB_SPAN_HAVE_DEDUCTION_GUIDES
 #endif
 
-#if defined(TCB_HAVE_CPP17) || defined(__cpp_lib_byte)
+#if defined(TCB_SPAN_HAVE_CPP17) || defined(__cpp_lib_byte)
 #define TCB_SPAN_HAVE_STD_BYTE
 #endif
 
-#if defined(TCB_HAVE_CPP17) || defined(__cpp_lib_array_constexpr)
+#if defined(TCB_SPAN_HAVE_CPP17) || defined(__cpp_lib_array_constexpr)
 #define TCB_SPAN_HAVE_CONSTEXPR_STD_ARRAY_ETC
 #endif
 
