@@ -52,6 +52,8 @@ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf
 #define TCB_SPAN_HAVE_CPP14
 #endif
 
+namespace TCB_SPAN_NAMESPACE_NAME {
+
 // Establish default contract checking behavior
 #if !defined(TCB_SPAN_THROW_ON_CONTRACT_VIOLATION) &&                          \
     !defined(TCB_SPAN_TERMINATE_ON_CONTRACT_VIOLATION) &&                      \
@@ -125,8 +127,6 @@ inline void contract_violation(const char* msg)
 #else
 #define TCB_SPAN_ARRAY_CONSTEXPR
 #endif
-
-namespace TCB_SPAN_NAMESPACE_NAME {
 
 #ifdef TCB_SPAN_HAVE_STD_BYTE
 using byte = std::byte;
