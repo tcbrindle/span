@@ -1,4 +1,3 @@
-
 /*
 This is an implementation of std::span from P0122R7
 http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf
@@ -391,7 +390,7 @@ public:
 
     ~span() noexcept = default;
 
-    TCB_SPAN_CONSTEXPR14 span& operator=(const span& other) noexcept = default;
+    span& operator=(const span& other) noexcept = default;
 
     // [span.sub], span subviews
     template <std::ptrdiff_t Count>
