@@ -287,7 +287,7 @@ public:
     // constants and types
     using element_type = ElementType;
     using value_type = typename std::remove_cv<ElementType>::type;
-    using index_type = std::ptrdiff_t;
+    using index_type = std::size_t;
     using difference_type = std::ptrdiff_t;
     using pointer = ElementType*;
     using reference = ElementType&;
