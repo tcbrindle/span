@@ -28,6 +28,12 @@ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf
 #include <stdexcept>
 #endif
 
+// Asumming that all compilers with version stricly above C++11 support all C++14 features
+// This may need to be refined as per compiler
+#if (__cplusplus <= 201103L)
+#define TCB_SPAN_NO_DEPRECATION_WARNINGS
+#endif
+
 // Various feature test macros
 
 #ifndef TCB_SPAN_NAMESPACE_NAME
