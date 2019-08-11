@@ -134,6 +134,13 @@ using byte = std::byte;
 using byte = unsigned char;
 #endif
 
+#if defined(TCB_SPAN_HAVE_CPP17) ||                                            \
+    (defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard))
+#define TCB_SPAN_NODISCARD [[nodiscard]]
+#else
+#define TCB_SPAN_NODISCARD
+#endif
+
 TCB_SPAN_INLINE_VAR constexpr std::size_t dynamic_extent = -1;
 
 template <typename ElementType, std::size_t Extent = dynamic_extent>
@@ -451,7 +458,7 @@ public:
         return size() * sizeof(element_type);
     }
 
-    constexpr bool empty() const noexcept { return size() == 0; }
+    TCB_SPAN_NODISCARD constexpr bool empty() const noexcept { return size() == 0; }
 
     // [span.elem], span element access
     TCB_SPAN_CONSTEXPR11 reference operator[](index_type idx) const
