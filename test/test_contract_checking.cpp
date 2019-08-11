@@ -49,7 +49,6 @@ TEST_CASE("fixed-size subspans")
     {
         std::vector<int> vec{1, 2, 3};
         auto s = make_span(vec);
-        TEST(s.first<-1>());
         TEST(s.first<4>());
     }
 
@@ -57,7 +56,6 @@ TEST_CASE("fixed-size subspans")
     {
         std::vector<int> vec{1, 2, 3};
         auto s = make_span(vec);
-        TEST(s.last<-1>());
         TEST(s.last<4>());
     }
 
@@ -65,7 +63,6 @@ TEST_CASE("fixed-size subspans")
     {
         std::vector<int> vec{1, 2, 3, 4, 5};
         auto s = make_span(vec);
-        TEST(s.subspan<-1>());
         TEST(s.subspan<6>());
     }
 
