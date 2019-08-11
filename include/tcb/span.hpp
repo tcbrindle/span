@@ -461,22 +461,6 @@ public:
 
     /* Extension: not in P0122 */
 #ifndef TCB_SPAN_STD_COMPLIANT_MODE
-    TCB_SPAN_CONSTEXPR14 reference at(index_type idx) const
-    {
-#ifndef TCB_SPAN_NO_EXCEPTIONS
-        if (idx < 0 || idx >= size()) {
-            char msgbuf[64] = {
-                0,
-            };
-            std::snprintf(msgbuf, sizeof(msgbuf),
-                          "Index %td is out of range for span of size %td", idx,
-                          size());
-            throw std::out_of_range{msgbuf};
-        }
-#endif // TCB_SPAN_NO_EXCEPTIONS
-        return this->operator[](idx);
-    }
-
     TCB_SPAN_CONSTEXPR11 reference front() const
     {
         TCB_SPAN_EXPECT(!empty());

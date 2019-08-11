@@ -586,11 +586,6 @@ TEST_CASE("span element access")
     REQUIRE(s[0] == arr[0]);
     REQUIRE(s[1] == arr[1]);
     REQUIRE(s[2] == arr[2]);
-
-    REQUIRE(s.at(0) == arr[0]);
-    REQUIRE(s.at(1) == arr[1]);
-    REQUIRE(s.at(2) == arr[2]);
-    REQUIRE_THROWS_AS(s.at(42), std::out_of_range);
 }
 
 TEST_CASE("span iterator support")
