@@ -459,8 +459,6 @@ public:
         return *(data() + idx);
     }
 
-    /* Extension: not in P0122 */
-#ifndef TCB_SPAN_STD_COMPLIANT_MODE
     TCB_SPAN_CONSTEXPR11 reference front() const
     {
         TCB_SPAN_EXPECT(!empty());
@@ -472,8 +470,6 @@ public:
         TCB_SPAN_EXPECT(!empty());
         return *(data() + (size() - 1));
     }
-
-#endif // TCB_SPAN_STD_COMPLIANT_MODE
 
     constexpr pointer data() const noexcept { return storage_.ptr; }
 
@@ -651,14 +647,6 @@ as_writable_bytes(span<ElementType, Extent> s) noexcept
     return {reinterpret_cast<byte*>(s.data()), s.size_bytes()};
 }
 
-} // namespace TCB_SPAN_NAMESPACE_NAME
-
-/* Extension: support for C++17 structured bindings */
-
-#ifndef TCB_SPAN_STD_COMPLIANT_MODE
-
-namespace TCB_SPAN_NAMESPACE_NAME {
-
 template <std::size_t N, typename E, std::size_t S>
 constexpr auto get(span<E, S> s) -> decltype(s[N])
 {
@@ -685,7 +673,5 @@ public:
 };
 
 } // end namespace std
-
-#endif // TCB_SPAN_STD_COMPLIANT_MODE
 
 #endif // TCB_SPAN_HPP_INCLUDED
