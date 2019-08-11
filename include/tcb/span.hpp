@@ -651,56 +651,6 @@ as_writable_bytes(span<ElementType, Extent> s) noexcept
     return {reinterpret_cast<byte*>(s.data()), s.size_bytes()};
 }
 
-/* Extension: nonmember subview operations */
-
-#ifndef TCB_SPAN_STD_COMPLIANT_MODE
-
-template <std::size_t Count, typename T>
-TCB_SPAN_CONSTEXPR11 auto first(T& t)
-    -> decltype(make_span(t).template first<Count>())
-{
-    return make_span(t).template first<Count>();
-}
-
-template <std::size_t Count, typename T>
-TCB_SPAN_CONSTEXPR11 auto last(T& t)
-    -> decltype(make_span(t).template last<Count>())
-{
-    return make_span(t).template last<Count>();
-}
-
-template <std::size_t Offset, std::size_t Count = dynamic_extent,
-          typename T>
-TCB_SPAN_CONSTEXPR11 auto subspan(T& t)
-    -> decltype(make_span(t).template subspan<Offset, Count>())
-{
-    return make_span(t).template subspan<Offset, Count>();
-}
-
-template <typename T>
-TCB_SPAN_CONSTEXPR11 auto first(T& t, std::size_t count)
-    -> decltype(make_span(t).first(count))
-{
-    return make_span(t).first(count);
-}
-
-template <typename T>
-TCB_SPAN_CONSTEXPR11 auto last(T& t, std::size_t count)
-    -> decltype(make_span(t).last(count))
-{
-    return make_span(t).last(count);
-}
-
-template <typename T>
-TCB_SPAN_CONSTEXPR11 auto subspan(T& t, std::size_t offset,
-                                  std::size_t count = dynamic_extent)
-    -> decltype(make_span(t).subspan(offset, count))
-{
-    return make_span(t).subspan(offset, count);
-}
-
-#endif // TCB_SPAN_STD_COMPLIANT_MODE
-
 } // namespace TCB_SPAN_NAMESPACE_NAME
 
 /* Extension: support for C++17 structured bindings */
