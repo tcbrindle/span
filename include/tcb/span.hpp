@@ -34,16 +34,6 @@ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf
 #define TCB_SPAN_NAMESPACE_NAME tcb
 #endif
 
-#ifdef TCB_SPAN_STD_COMPLIANT_MODE
-#define TCB_SPAN_NO_DEPRECATION_WARNINGS
-#endif
-
-#ifndef TCB_SPAN_NO_DEPRECATION_WARNINGS
-#define TCB_SPAN_DEPRECATED_FOR(msg) [[deprecated(msg)]]
-#else
-#define TCB_SPAN_DEPRECATED_FOR(msg)
-#endif
-
 #if __cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)
 #define TCB_SPAN_HAVE_CPP17
 #endif
@@ -500,14 +490,6 @@ public:
     }
 
 #endif // TCB_SPAN_STD_COMPLIANT_MODE
-
-#ifndef TCB_SPAN_NO_FUNCTION_CALL_OPERATOR
-    TCB_SPAN_DEPRECATED_FOR("Use operator[] instead")
-    constexpr reference operator()(index_type idx) const
-    {
-        return this->operator[](idx);
-    }
-#endif // TCB_SPAN_NO_FUNCTION_CALL_OPERATOR
 
     constexpr pointer data() const noexcept { return storage_.ptr; }
 

@@ -118,9 +118,6 @@ TEST_CASE("Member access")
 
     TEST(s[-2]);
     TEST(s[42]);
-
-    TEST(s(-2));
-    TEST(s(42));
 }
 
 TEST_CASE("front() and back()")
