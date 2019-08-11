@@ -1,7 +1,7 @@
 
 /*
-This is an implementation of std::span from P0122R7
-http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf
+This is an implementation of C++20's std::span
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/n4820.pdf
 */
 
 //          Copyright Tristan Brindle 2018.
@@ -286,10 +286,11 @@ public:
     using value_type = typename std::remove_cv<ElementType>::type;
     using index_type = std::size_t;
     using difference_type = std::ptrdiff_t;
-    using pointer = ElementType*;
-    using reference = ElementType&;
+    using pointer = element_type*;
+    using const_pointer = const element_type*;
+    using reference = element_type&;
     using iterator = pointer;
-    using const_iterator = const ElementType*;
+    using const_iterator = const_pointer;
     using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
