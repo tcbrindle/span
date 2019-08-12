@@ -16,7 +16,7 @@
 language: cpp
 
 os: linux
-dist: trusty
+dist: precise
 sudo: false
 
 # Do not build branches of the form "pr/*". By prefixing pull requests coming
@@ -108,7 +108,7 @@ matrix:
       addons:
         apt:
           packages:
-            - g++-9
+            - g++-7
           sources:
             - ubuntu-toolchain-r-test
 
@@ -171,7 +171,16 @@ matrix:
       addons:
         apt:
           packages:
-            - g++-4.8
+            - g++-4.7
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC 4.6, C++11
+    - env: COMPILER=g++-4.6 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - g++-4.6
           sources:
             - ubuntu-toolchain-r-test
 
