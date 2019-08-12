@@ -9,31 +9,27 @@ endif()
 
 set(CMAKE_CXX_EXTENSIONS Off)
 
-add_executable(test_span11
-    catch_main.cpp
+add_library(catch_main catch_main.cpp)
+
+set(TEST_FILES
     test_span.cpp
 )
-target_link_libraries(test_span11 PUBLIC span)
-target_compile_features(test_span11 PUBLIC cxx_std_11)
 
-add_executable(test_span14
-    catch_main.cpp
-    test_span.cpp
-)
-target_link_libraries(test_span14 PUBLIC span)
-target_compile_features(test_span14 PUBLIC cxx_std_14)
+if (${TCB_SPAN_TEST_CXX_STD} GREATER_EQUAL 17)
+    list(APPEND TEST_FILES
+         test_deduction_guides.cpp
+         test_structured_bindings.cpp)
+endif()
 
-add_executable(test_span17
-    catch_main.cpp
-    test_span.cpp
-    test_deduction_guides.cpp
-    test_structured_bindings.cpp
-)
-target_link_libraries(test_span17 PUBLIC span)
-target_compile_features(test_span17 PUBLIC cxx_std_17)
+add_executable(test_span ${TEST_FILES})
+target_link_libraries(test_span PUBLIC span catch_main)
+set_target_properties(test_span PROPERTIES
+                      CXX_STANDARD ${TCB_SPAN_TEST_CXX_STD})
+add_test(test_span test_span)
 
-add_executable(test_contract_checking
-    catch_main.cpp
-    test_contract_checking.cpp
-)
-target_link_libraries(test_contract_checking PUBLIC span)
+add_executable(test_span_contract_checking
+               test_contract_checking.cpp)
+target_link_libraries(test_span_contract_checking PUBLIC span catch_main)
+set_target_properties(test_span_contract_checking PROPERTIES
+    CXX_STANDARD ${TCB_SPAN_TEST_CXX_STD})
+add_test(test_contract_checking test_span_contract_checking)
