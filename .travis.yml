@@ -1,0 +1,540 @@
+#
+# Travis CI config file
+#
+# Copyright Tristan Brindle 2019
+#
+# Use, modification and distribution is subject to the
+# Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+#
+# Heavily based on travis.yml from Boost.Hana
+#
+# Copyright Louis Dionne 2013-18
+#
+
+language: cpp
+
+os: linux
+dist: xenial
+sudo: false
+
+# Do not build branches of the form "pr/*". By prefixing pull requests coming
+# from branches inside the repository with pr/, this avoids building both the
+# branch push _and_ the pull request.
+# Based on https://github.com/boostorg/hana/blob/master/.travis.yml
+branches:
+  except: /pr\/.*/
+
+matrix:
+  include:
+    #
+    # Mac OS builds
+    #
+    - os: osx
+      osx_image: xcode11
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode11
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode11
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode10.2
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode10.2
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode10.2
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode10.1
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode10.1
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode10.1
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode10
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode10
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode10
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.4
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.4
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.3
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.3
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.2
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.2
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.1
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.1
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode8.3
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode8.3
+      env: COMPILER=clang++ CPP_VER=11
+
+    #
+    # Linux builds
+    #
+    # GCC 9, C++17
+    - env: COMPILER=g++-9 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - g++-9
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC9, C++14
+    - env: COMPILER=g++-9 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - g++-9
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC9, C++11
+    - env: COMPILER=g++-9 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - g++-9
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC 8, C++17
+    - env: COMPILER=g++-8 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC8, C++14
+    - env: COMPILER=g++-8 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC8, C++11
+    - env: COMPILER=g++-8 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC 7, C++17
+    - env: COMPILER=g++-7 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - g++-7
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC7, C++14
+    - env: COMPILER=g++-7 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - g++-7
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC7, C++11
+    - env: COMPILER=g++-7 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - g++-7
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC 6, C++14
+    - env: COMPILER=g++-6 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - g++-6
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC 6, C++11
+    - env: COMPILER=g++-6 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - g++-6
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC 5, C++14
+    - env: COMPILER=g++-5 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - g++-5
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # GCC 5, C++11
+    - env: COMPILER=g++-5 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - g++-5
+          sources:
+            - ubuntu-toolchain-r-test
+
+    # Clang 8, C++17
+    - env: COMPILER=clang++-8 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - clang-8
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-8
+
+    # Clang 8, C++14
+    - env: COMPILER=clang++-8 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-8
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-8
+
+    # Clang 8, C++11
+    - env: COMPILER=clang++-8 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-8
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-8
+
+    # Clang 7, C++17
+    - env: COMPILER=clang++-7 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - clang-7
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+
+    # Clang 7, C++14
+    - env: COMPILER=clang++-7 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-7
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+
+    # Clang 7, C++11
+    - env: COMPILER=clang++-7 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-7
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+
+    # Clang 6, C++17
+    - env: COMPILER=clang++-6.0 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - clang-6.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-6.0
+
+    # Clang 6, C++14
+    - env: COMPILER=clang++-6.0 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-6.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-6.0
+
+    # Clang 6, C++11
+    - env: COMPILER=clang++-6.0 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-6.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-6.0
+
+    # Clang 5, C++17
+    - env: COMPILER=clang++-5.0 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - clang-5.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-5.0
+
+    # Clang 5, C++14
+    - env: COMPILER=clang++-5.0 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-5.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-5.0
+
+    # Clang 5, C++11
+    - env: COMPILER=clang++-5.0 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-5.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-5.0
+
+    # Clang 4, C++17
+    - env: COMPILER=clang++-4.0 CPP_VER=17
+      addons:
+        apt:
+          packages:
+            - clang-4.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-4.0
+
+    # Clang 4, C++14
+    - env: COMPILER=clang++-4.0 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-4.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-4.0
+
+    # Clang 4, C++11
+    - env: COMPILER=clang++-4.0 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-4.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-4.0
+
+    # Clang 3.9, C++14
+    - env: COMPILER=clang++-3.9 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-3.9
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.9
+
+    # Clang 3.9, C++11
+    - env: COMPILER=clang++-3.9 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-3.9
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.9
+
+    # Clang 3.8, C++14
+    - env: COMPILER=clang++-3.8 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-3.8
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.8
+
+    # Clang 3.8, C++11
+    - env: COMPILER=clang++-3.8 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-3.8
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.8
+
+    # Clang 3.7, C++14
+    - env: COMPILER=clang++-3.7 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-3.7
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.7
+
+    # Clang 3.7, C++11
+    - env: COMPILER=clang++-3.7 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-3.7
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.7
+
+    # Clang 3.6, C++14
+    - env: COMPILER=clang++-3.6 CPP_VER=14
+      addons:
+        apt:
+          packages:
+            - clang-3.6
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.6
+
+    # Clang 3.6, C++11
+    - env: COMPILER=clang++-3.6 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-3.6
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.6
+
+    # Clang 3.5, C++11
+    - env: COMPILER=clang++-3.5 CPP_VER=11
+      addons:
+        apt:
+          packages:
+            - clang-3.5
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.5
+
+install:
+  - DEPS_DIR="${HOME}/deps"
+  - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
+
+  - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
+  - ${CXX} --version
+
+  ############################################################################
+  # Install libc++ and libc++abi if needed
+  # Taken from https://github.com/boostorg/hana/blob/master/.travis.yml
+  ############################################################################
+  - |
+    if [[ "$CPP_VER" == "17" && "$TRAVIS_OS_NAME" == "linux" && "${CXX%%+*}" == "clang" ]]; then
+      if   [[ "${CXX}" == "clang++-3.5" ]]; then LLVM_VERSION="3.5.2";
+      elif [[ "${CXX}" == "clang++-3.6" ]]; then LLVM_VERSION="3.6.2";
+      elif [[ "${CXX}" == "clang++-3.7" ]]; then LLVM_VERSION="3.7.1";
+      elif [[ "${CXX}" == "clang++-3.8" ]]; then LLVM_VERSION="3.8.1";
+      elif [[ "${CXX}" == "clang++-3.9" ]]; then LLVM_VERSION="3.9.1";
+      elif [[ "${CXX}" == "clang++-4.0" ]]; then LLVM_VERSION="4.0.1";
+      elif [[ "${CXX}" == "clang++-5.0" ]]; then LLVM_VERSION="5.0.2";
+      elif [[ "${CXX}" == "clang++-6.0" ]]; then LLVM_VERSION="6.0.0";
+      elif [[ "${CXX}" == "clang++-7" ]]; then LLVM_VERSION="7.0.0";
+      elif [[ "${CXX}" == "clang++-8" ]]; then LLVM_VERSION="8.0.0";
+      fi
+      LLVM_URL="http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
+      LIBCXX_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxx-${LLVM_VERSION}.src.tar.xz"
+      LIBCXXABI_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxxabi-${LLVM_VERSION}.src.tar.xz"
+      mkdir -p llvm llvm/build llvm/projects/libcxx llvm/projects/libcxxabi
+      travis_retry wget -O - ${LLVM_URL} | tar --strip-components=1 -xJ -C llvm || exit 1
+      travis_retry wget -O - ${LIBCXX_URL} | tar --strip-components=1 -xJ -C llvm/projects/libcxx || exit 1
+      travis_retry wget -O - ${LIBCXXABI_URL} | tar --strip-components=1 -xJ -C llvm/projects/libcxxabi || exit 1
+      (cd llvm/build && cmake .. -DCMAKE_INSTALL_PREFIX=${DEPS_DIR}/llvm/install) || exit 1
+      (cd llvm/build/projects/libcxx && make install -j2) || exit 1
+      (cd llvm/build/projects/libcxxabi && make install -j2) || exit 1
+      export CXXFLAGS="-isystem ${DEPS_DIR}/llvm/install/include/c++/v1"
+      export LDFLAGS="-L ${DEPS_DIR}/llvm/install/lib -l c++ -l c++abi"
+      export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${DEPS_DIR}/llvm/install/lib"
+    fi
+
+before_script:
+  - cd $TRAVIS_BUILD_DIR
+  - mkdir -p -v build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=$COMPILER -DTCB_SPAN_TEST_CXX_STD=$CPP_VER
+
+script:
+  - cmake --build . -- -j2
+  - ctest -j2
+
+notifications:
+  email: off

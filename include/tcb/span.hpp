@@ -97,11 +97,21 @@ inline void contract_violation(const char* msg)
 #define TCB_SPAN_INLINE_VAR
 #endif
 
-#if defined(TCB_SPAN_HAVE_CPP14) ||                                                 \
+#if defined(TCB_SPAN_HAVE_CPP14) ||                                            \
     (defined(__cpp_constexpr) && __cpp_constexpr >= 201304)
+#define TCB_SPAN_HAVE_CPP14_CONSTEXPR
+#endif
+
+#if defined(TCB_SPAN_HAVE_CPP14_CONSTEXPR)
 #define TCB_SPAN_CONSTEXPR14 constexpr
 #else
 #define TCB_SPAN_CONSTEXPR14
+#endif
+
+#if defined(TCB_SPAN_HAVE_CPP14_CONSTEXPR) && (!defined(_MSC_VER) || _MSC_VER > 1900)
+#define TCB_SPAN_CONSTEXPR_ASSIGN constexpr
+#else
+#define TCB_SPAN_CONSTEXPR_ASSIGN
 #endif
 
 #if defined(TCB_SPAN_NO_CONTRACT_CHECKING)
@@ -391,7 +401,7 @@ public:
 
     ~span() noexcept = default;
 
-    TCB_SPAN_CONSTEXPR14 span& operator=(const span& other) noexcept = default;
+    TCB_SPAN_CONSTEXPR_ASSIGN span& operator=(const span& other) noexcept = default;
 
     // [span.sub], span subviews
     template <std::ptrdiff_t Count>

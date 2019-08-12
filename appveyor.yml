@@ -1,0 +1,52 @@
+
+# Do not build branches of the form "pr/*". By prefixing pull requests coming
+# from branches inside the repository with pr/, this avoids building both the
+# branch push _and_ the pull request.
+# Based on https://github.com/boostorg/hana/blob/master/.travis.yml
+branches:
+  except:
+    - /pr\/.+/
+
+environment:
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+      CXX_VER: 17
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+      CXX_VER: 14
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+      CXX_VER: 11
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 Preview
+      CXX_VER: 17
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 Preview
+      CXX_VER: 14
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 Preview
+      CXX_VER: 11
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CXX_VER: 17
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CXX_VER: 14
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CXX_VER: 11
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      CXX_VER: 14
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      CXX_VER: 11
+
+build_script:
+  - mkdir cmake-build
+  - cd cmake-build
+  - cmake .. -DTCB_SPAN_TEST_CXX_STD=%CXX_VER%
+  - cmake --build . --config Debug
+
+test_script:
+  - ctest -j2
