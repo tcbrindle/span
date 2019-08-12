@@ -134,8 +134,7 @@ using byte = std::byte;
 using byte = unsigned char;
 #endif
 
-#if defined(TCB_SPAN_HAVE_CPP17) ||                                            \
-    (defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard))
+#if defined(TCB_SPAN_HAVE_CPP17)
 #define TCB_SPAN_NODISCARD [[nodiscard]]
 #else
 #define TCB_SPAN_NODISCARD
