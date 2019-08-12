@@ -378,16 +378,6 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-3.6
 
-    # Clang 3.5, C++14
-    - env: COMPILER=clang++-3.5 CPP_VER=14
-      addons:
-        apt:
-          packages:
-            - clang-3.5
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-xenial-3.5
-
     # Clang 3.5, C++11
     - env: COMPILER=clang++-3.5 CPP_VER=11
       addons:
@@ -495,30 +485,6 @@ matrix:
 
     - os: osx
       osx_image: xcode8.3
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode8
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode8
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode7.3
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode7.3
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode6.4
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode6.4
       env: COMPILER=clang++ CPP_VER=11
 
 install:
