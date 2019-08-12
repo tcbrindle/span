@@ -148,24 +148,6 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    # GCC 4.9, C++11
-    - env: COMPILER=g++-4.9 CPP_VER=11
-      addons:
-        apt:
-          packages:
-            - g++-4.9
-          sources:
-            - ubuntu-toolchain-r-test
-
-    # GCC 4.8, C++11
-    - env: COMPILER=g++-4.8 CPP_VER=11
-      addons:
-        apt:
-          packages:
-            - g++-4.8
-          sources:
-            - ubuntu-toolchain-r-test
-
     # Clang 8, C++17
     - env: COMPILER=clang++-8 CPP_VER=17
       addons:
