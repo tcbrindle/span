@@ -16,7 +16,7 @@
 language: cpp
 
 os: linux
-dist: trusty
+dist: xenial
 sudo: false
 
 # Do not build branches of the form "pr/*". By prefixing pull requests coming
@@ -156,7 +156,7 @@ matrix:
             - clang-8
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
+            - llvm-toolchain-xenial-8
 
     # Clang 8, C++14
     - env: COMPILER=clang++-8 CPP_VER=14
@@ -166,7 +166,7 @@ matrix:
             - clang-8
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
+            - llvm-toolchain-xenial-8
 
     # Clang 8, C++11
     - env: COMPILER=clang++-8 CPP_VER=11
@@ -176,7 +176,7 @@ matrix:
             - clang-8
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
+            - llvm-toolchain-xenial-8
 
     # Clang 7, C++17
     - env: COMPILER=clang++-7 CPP_VER=17
@@ -186,7 +186,7 @@ matrix:
             - clang-7
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
+            - llvm-toolchain-xenial-7
 
     # Clang 7, C++14
     - env: COMPILER=clang++-7 CPP_VER=14
@@ -196,7 +196,7 @@ matrix:
             - clang-7
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
+            - llvm-toolchain-xenial-7
 
     # Clang 7, C++11
     - env: COMPILER=clang++-7 CPP_VER=11
@@ -206,7 +206,7 @@ matrix:
             - clang-7
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
+            - llvm-toolchain-xenial-7
 
     # Clang 6, C++17
     - env: COMPILER=clang++-6.0 CPP_VER=17
@@ -216,7 +216,7 @@ matrix:
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
+            - llvm-toolchain-xenial-6.0
 
     # Clang 6, C++14
     - env: COMPILER=clang++-6.0 CPP_VER=14
@@ -226,7 +226,7 @@ matrix:
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
+            - llvm-toolchain-xenial-6.0
 
     # Clang 6, C++11
     - env: COMPILER=clang++-6.0 CPP_VER=11
@@ -236,7 +236,7 @@ matrix:
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
+            - llvm-toolchain-xenial-6.0
 
     # Clang 5, C++17
     - env: COMPILER=clang++-5.0 CPP_VER=17
@@ -246,7 +246,7 @@ matrix:
             - clang-5.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
 
     # Clang 5, C++14
     - env: COMPILER=clang++-5.0 CPP_VER=14
@@ -256,7 +256,7 @@ matrix:
             - clang-5.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
 
     # Clang 5, C++11
     - env: COMPILER=clang++-5.0 CPP_VER=11
@@ -266,7 +266,7 @@ matrix:
             - clang-5.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
 
     #
     # Mac OS builds
@@ -303,7 +303,7 @@ install:
   # Taken from https://github.com/boostorg/hana/blob/master/.travis.yml
   ############################################################################
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" && "${CXX%%+*}" == "clang" ]]; then
+    if [[ "$CPP_VER" == "17" && "$TRAVIS_OS_NAME" == "linux" && "${CXX%%+*}" == "clang" ]]; then
       if [[ "${CXX}" == "clang++-5.0" ]]; then LLVM_VERSION="5.0.2";
       elif [[ "${CXX}" == "clang++-6.0" ]]; then LLVM_VERSION="6.0.0";
       elif [[ "${CXX}" == "clang++-7" ]]; then LLVM_VERSION="7.0.0";
