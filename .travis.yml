@@ -154,8 +154,6 @@ matrix:
         apt:
           packages:
             - clang-8
-            - libc++-8-dev
-            - libc++abi-8-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-8
@@ -166,8 +164,6 @@ matrix:
         apt:
           packages:
             - clang-8
-            - libc++-8-dev
-            - libc++abi-8-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-8
@@ -178,8 +174,6 @@ matrix:
         apt:
           packages:
             - clang-8
-            - libc++-8-dev
-            - libc++abi-8-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-8
@@ -190,8 +184,6 @@ matrix:
         apt:
           packages:
             - clang-7
-            - libc++-7-dev
-            - libc++abi-7-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-7
@@ -202,8 +194,6 @@ matrix:
         apt:
           packages:
             - clang-7
-            - libc++-7-dev
-            - libc++abi-7-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-7
@@ -214,8 +204,6 @@ matrix:
         apt:
           packages:
             - clang-7
-            - libc++-7-dev
-            - libc++abi-7-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-7
@@ -226,8 +214,6 @@ matrix:
         apt:
           packages:
             - clang-6.0
-            - libc++-6.0-dev
-            - libc++abi-6.0-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-6.0
@@ -238,8 +224,6 @@ matrix:
         apt:
           packages:
             - clang-6.0
-            - libc++-6.0-dev
-            - libc++abi-6.0-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-6.0
@@ -250,8 +234,6 @@ matrix:
         apt:
           packages:
             - clang-6.0
-            - libc++-6.0-dev
-            - libc++abi-6.0-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-6.0
@@ -262,8 +244,6 @@ matrix:
         apt:
           packages:
             - clang-5.0
-            - libc++-5.0-dev
-            - libc++abi-5.0-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-5.0
@@ -274,8 +254,6 @@ matrix:
         apt:
           packages:
             - clang-5.0
-            - libc++-5.0-dev
-            - libc++abi-5.0-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-5.0
@@ -286,8 +264,6 @@ matrix:
         apt:
           packages:
             - clang-5.0
-            - libc++-5.0-dev
-            - libc++abi-5.0-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-5.0
@@ -327,8 +303,25 @@ install:
   # Taken from https://github.com/boostorg/hana/blob/master/.travis.yml
   ############################################################################
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" && "${CXX%%+*}" == "clang" ]]; then
-      export CXXFLAGS="-stdlib=libc++"
+    if [[ "$CPP_VER" == "17" && "$TRAVIS_OS_NAME" == "linux" && "${CXX%%+*}" == "clang" ]]; then
+      if [[ "${CXX}" == "clang++-5.0" ]]; then LLVM_VERSION="5.0.2";
+      elif [[ "${CXX}" == "clang++-6.0" ]]; then LLVM_VERSION="6.0.0";
+      elif [[ "${CXX}" == "clang++-7" ]]; then LLVM_VERSION="7.0.0";
+      elif [[ "${CXX}" == "clang++-8" ]]; then LLVM_VERSION="8.0.0";
+      fi
+      LLVM_URL="http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
+      LIBCXX_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxx-${LLVM_VERSION}.src.tar.xz"
+      LIBCXXABI_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxxabi-${LLVM_VERSION}.src.tar.xz"
+      mkdir -p llvm llvm/build llvm/projects/libcxx llvm/projects/libcxxabi
+      travis_retry wget -O - ${LLVM_URL} | tar --strip-components=1 -xJ -C llvm || exit 1
+      travis_retry wget -O - ${LIBCXX_URL} | tar --strip-components=1 -xJ -C llvm/projects/libcxx || exit 1
+      travis_retry wget -O - ${LIBCXXABI_URL} | tar --strip-components=1 -xJ -C llvm/projects/libcxxabi || exit 1
+      (cd llvm/build && cmake .. -DCMAKE_INSTALL_PREFIX=${DEPS_DIR}/llvm/install) || exit 1
+      (cd llvm/build/projects/libcxx && make install -j2) || exit 1
+      (cd llvm/build/projects/libcxxabi && make install -j2) || exit 1
+      export CXXFLAGS="-isystem ${DEPS_DIR}/llvm/install/include/c++/v1"
+      export LDFLAGS="-L ${DEPS_DIR}/llvm/install/lib -l c++ -l c++abi"
+      export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${DEPS_DIR}/llvm/install/lib"
     fi
 
 before_script:
