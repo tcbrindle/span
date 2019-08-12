@@ -16,7 +16,7 @@
 language: cpp
 
 os: linux
-dist: xenial
+dist: trusty
 sudo: false
 
 # Do not build branches of the form "pr/*". By prefixing pull requests coming
