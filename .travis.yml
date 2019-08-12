@@ -29,6 +29,105 @@ branches:
 matrix:
   include:
     #
+    # Mac OS builds
+    #
+    - os: osx
+      osx_image: xcode11
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode11
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode11
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode10.2
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode10.2
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode10.2
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode10.1
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode10.1
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode10.1
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode10
+      env: COMPILER=clang++ CPP_VER=17
+
+    - os: osx
+      osx_image: xcode10
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode10
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.4
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.4
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.3
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.3
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.2
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.2
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9.1
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9.1
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode9
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode9
+      env: COMPILER=clang++ CPP_VER=11
+
+    - os: osx
+      osx_image: xcode8.3
+      env: COMPILER=clang++ CPP_VER=14
+
+    - os: osx
+      osx_image: xcode8.3
+      env: COMPILER=clang++ CPP_VER=11
+
+    #
     # Linux builds
     #
     # GCC 9, C++17
@@ -387,105 +486,6 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-3.5
-
-    #
-    # Mac OS builds
-    #
-    - os: osx
-      osx_image: xcode11
-      env: COMPILER=clang++ CPP_VER=17
-
-    - os: osx
-      osx_image: xcode11
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode11
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode10.2
-      env: COMPILER=clang++ CPP_VER=17
-
-    - os: osx
-      osx_image: xcode10.2
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode10.2
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode10.1
-      env: COMPILER=clang++ CPP_VER=17
-
-    - os: osx
-      osx_image: xcode10.1
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode10.1
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode10
-      env: COMPILER=clang++ CPP_VER=17
-
-    - os: osx
-      osx_image: xcode10
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode10
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode9.4
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode9.4
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode9.3
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode9.3
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode9.2
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode9.2
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode9.1
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode9.1
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode9
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode9
-      env: COMPILER=clang++ CPP_VER=11
-
-    - os: osx
-      osx_image: xcode8.3
-      env: COMPILER=clang++ CPP_VER=14
-
-    - os: osx
-      osx_image: xcode8.3
-      env: COMPILER=clang++ CPP_VER=11
 
 install:
   - DEPS_DIR="${HOME}/deps"
