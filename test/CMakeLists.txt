@@ -10,6 +10,8 @@ endif()
 set(CMAKE_CXX_EXTENSIONS Off)
 
 add_library(catch_main catch_main.cpp)
+set_target_properties(catch_main PROPERTIES
+    CXX_STANDARD ${TCB_SPAN_TEST_CXX_STD})
 
 set(TEST_FILES
     test_span.cpp
