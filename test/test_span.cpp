@@ -586,15 +586,6 @@ TEST_CASE("span element access")
     REQUIRE(s[0] == arr[0]);
     REQUIRE(s[1] == arr[1]);
     REQUIRE(s[2] == arr[2]);
-
-    REQUIRE(s(0) == arr[0]);
-    REQUIRE(s(1) == arr[1]);
-    REQUIRE(s(2) == arr[2]);
-
-    REQUIRE(s.at(0) == arr[0]);
-    REQUIRE(s.at(1) == arr[1]);
-    REQUIRE(s.at(2) == arr[2]);
-    REQUIRE_THROWS_AS(s.at(42), std::out_of_range);
 }
 
 TEST_CASE("span iterator support")
@@ -610,75 +601,6 @@ TEST_CASE("span iterator support")
         const std::vector<int> vec{1, 2, 3};
         span<const int> s{vec};
         REQUIRE(std::equal(s.rbegin(), s.rend(), vec.crbegin()));
-    }
-}
-
-TEST_CASE("nonmember first<N>()")
-{
-    {
-        int arr[] = {1, 2, 3, 4, 5};
-        auto s = tcb::first<3>(arr);
-        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
-
-        REQUIRE(s.size() == 3);
-        REQUIRE(s.data() == arr);
-        REQUIRE(s.begin() == arr);
-        REQUIRE(s.end() == arr + 3);
-    }
-
-    {
-        const int arr[] = {1, 2, 3, 4, 5};
-        auto s = tcb::first<3>(arr);
-        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
-
-        REQUIRE(s.size() == 3);
-        REQUIRE(s.data() == arr);
-        REQUIRE(s.begin() == arr);
-        REQUIRE(s.end() == arr + 3);
-    }
-
-    {
-        std::array<int, 5> arr = {1, 2, 3, 4, 5};
-        auto s = tcb::first<3>(arr);
-        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
-
-        REQUIRE(s.size() == 3);
-        REQUIRE(s.data() == arr.data());
-        REQUIRE(s.begin() == arr.data());
-        REQUIRE(s.end() == arr.data() + 3);
-    }
-
-    {
-        const std::array<int, 5> arr = {1, 2, 3, 4, 5};
-        auto s = tcb::first<3>(arr);
-        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
-
-        REQUIRE(s.size() == 3);
-        REQUIRE(s.data() == arr.data());
-        REQUIRE(s.begin() == arr.data());
-        REQUIRE(s.end() == arr.data() + 3);
-    }
-
-    {
-        std::vector<int> vec = {1, 2, 3, 4, 5};
-        auto s = tcb::first<3>(vec);
-        static_assert(std::is_same<decltype(s), span<int, 3>>::value, "");
-
-        REQUIRE(s.size() == 3);
-        REQUIRE(s.data() == vec.data());
-        REQUIRE(s.begin() == vec.data());
-        REQUIRE(s.end() == vec.data() + 3);
-    }
-
-    {
-        const std::vector<int> vec = {1, 2, 3, 4, 5};
-        auto s = tcb::first<3>(vec);
-        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
-
-        REQUIRE(s.size() == 3);
-        REQUIRE(s.data() == vec.data());
-        REQUIRE(s.begin() == vec.data());
-        REQUIRE(s.end() == vec.data() + 3);
     }
 }
 
