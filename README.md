@@ -9,7 +9,7 @@
 ==============================================
 
 This repository contains a single-header implementation of C++20's `std::span`,
-conforming to [P0122R7](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0122r7.pdf).
+conforming to the C++20 committee draft.
 It is compatible with C++11, but will use newer language features if they
 are available.
 
