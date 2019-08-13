@@ -42,6 +42,9 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       CXX_VER: 11
 
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      CXX_VER: 11
+
 build_script:
   - mkdir cmake-build
   - cd cmake-build
