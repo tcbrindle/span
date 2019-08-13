@@ -140,6 +140,13 @@ using byte = unsigned char;
 #define TCB_SPAN_NODISCARD
 #endif
 
+// MSVC 2013 doesn't support the noexcept keyword
+#if defined(_MSC_VER)  && _MSC_VER < 1900
+#define TCB_SPAN_NOEXCEPT throws()
+#else
+#define TCB_SPAN_NOEXCEPT noexcept
+#endif
+
 TCB_SPAN_INLINE_VAR constexpr std::size_t dynamic_extent = -1;
 
 template <typename ElementType, std::size_t Extent = dynamic_extent>
@@ -149,9 +156,9 @@ namespace detail {
 
 template <typename E, std::size_t S>
 struct span_storage {
-    constexpr span_storage() noexcept = default;
+    constexpr span_storage() TCB_SPAN_NOEXCEPT = default;
 
-    constexpr span_storage(E* ptr, std::size_t /*unused*/) noexcept
+    constexpr span_storage(E* ptr, std::size_t /*unused*/) TCB_SPAN_NOEXCEPT
         : ptr(ptr)
     {}
 
@@ -161,9 +168,9 @@ struct span_storage {
 
 template <typename E>
 struct span_storage<E, dynamic_extent> {
-    constexpr span_storage() noexcept = default;
+    constexpr span_storage() TCB_SPAN_NOEXCEPT = default;
 
-    constexpr span_storage(E* ptr, std::size_t size) noexcept
+    constexpr span_storage(E* ptr, std::size_t size) TCB_SPAN_NOEXCEPT
         : ptr(ptr), size(size)
     {}
 
@@ -184,7 +191,7 @@ constexpr auto size(const C& c) -> decltype(c.size())
 }
 
 template <class T, std::size_t N>
-constexpr std::size_t size(const T (&)[N]) noexcept
+constexpr std::size_t size(const T (&)[N]) TCB_SPAN_NOEXCEPT
 {
     return N;
 }
@@ -202,13 +209,13 @@ constexpr auto data(const C& c) -> decltype(c.data())
 }
 
 template <class T, std::size_t N>
-constexpr T* data(T (&array)[N]) noexcept
+constexpr T* data(T (&array)[N]) TCB_SPAN_NOEXCEPT
 {
     return array;
 }
 
 template <class E>
-constexpr const E* data(std::initializer_list<E> il) noexcept
+constexpr const E* data(std::initializer_list<E> il) TCB_SPAN_NOEXCEPT
 {
     return il.begin();
 }
@@ -305,7 +312,7 @@ public:
     // [span.cons], span constructors, copy, assignment, and destructor
     template <std::size_t E = Extent,
               typename std::enable_if<(E == dynamic_extent || E <= 0), int>::type = 0>
-    constexpr span() noexcept
+    constexpr span() TCB_SPAN_NOEXCEPT
     {}
 
     TCB_SPAN_CONSTEXPR11 span(pointer ptr, index_type count)
@@ -328,7 +335,7 @@ public:
                 detail::is_container_element_type_compatible<
                     element_type (&)[N], ElementType>::value,
             int>::type = 0>
-    constexpr span(element_type (&arr)[N]) noexcept : storage_(arr, N)
+    constexpr span(element_type (&arr)[N]) TCB_SPAN_NOEXCEPT : storage_(arr, N)
     {}
 
     template <
@@ -338,7 +345,7 @@ public:
                 detail::is_container_element_type_compatible<
                     std::array<value_type, N>&, ElementType>::value,
             int>::type = 0>
-    TCB_SPAN_ARRAY_CONSTEXPR span(std::array<value_type, N>& arr) noexcept
+    TCB_SPAN_ARRAY_CONSTEXPR span(std::array<value_type, N>& arr) TCB_SPAN_NOEXCEPT
         : storage_(arr.data(), N)
     {}
 
@@ -349,7 +356,7 @@ public:
                 detail::is_container_element_type_compatible<
                     const std::array<value_type, N>&, ElementType>::value,
             int>::type = 0>
-    TCB_SPAN_ARRAY_CONSTEXPR span(const std::array<value_type, N>& arr) noexcept
+    TCB_SPAN_ARRAY_CONSTEXPR span(const std::array<value_type, N>& arr) TCB_SPAN_NOEXCEPT
         : storage_(arr.data(), N)
     {}
 
@@ -379,7 +386,7 @@ public:
                         detail::size(cont) == extent);
     }
 
-    constexpr span(const span& other) noexcept = default;
+    constexpr span(const span& other) TCB_SPAN_NOEXCEPT = default;
 
     template <typename OtherElementType, std::size_t OtherExtent,
               typename std::enable_if<
@@ -387,13 +394,13 @@ public:
                       std::is_convertible<OtherElementType (*)[],
                                           ElementType (*)[]>::value,
                   int>::type = 0>
-    constexpr span(const span<OtherElementType, OtherExtent>& other) noexcept
+    constexpr span(const span<OtherElementType, OtherExtent>& other) TCB_SPAN_NOEXCEPT
         : storage_(other.data(), other.size())
     {}
 
-    ~span() noexcept = default;
+    ~span() TCB_SPAN_NOEXCEPT = default;
 
-    TCB_SPAN_CONSTEXPR_ASSIGN span& operator=(const span& other) noexcept = default;
+    TCB_SPAN_CONSTEXPR_ASSIGN span& operator=(const span& other) TCB_SPAN_NOEXCEPT = default;
 
     // [span.sub], span subviews
     template <std::size_t Count>
@@ -450,14 +457,14 @@ public:
     }
 
     // [span.obs], span observers
-    constexpr index_type size() const noexcept { return storage_.size; }
+    constexpr index_type size() const TCB_SPAN_NOEXCEPT { return storage_.size; }
 
-    constexpr index_type size_bytes() const noexcept
+    constexpr index_type size_bytes() const TCB_SPAN_NOEXCEPT
     {
         return size() * sizeof(element_type);
     }
 
-    TCB_SPAN_NODISCARD constexpr bool empty() const noexcept { return size() == 0; }
+    TCB_SPAN_NODISCARD constexpr bool empty() const TCB_SPAN_NOEXCEPT { return size() == 0; }
 
     // [span.elem], span element access
     TCB_SPAN_CONSTEXPR11 reference operator[](index_type idx) const
@@ -478,33 +485,33 @@ public:
         return *(data() + (size() - 1));
     }
 
-    constexpr pointer data() const noexcept { return storage_.ptr; }
+    constexpr pointer data() const TCB_SPAN_NOEXCEPT { return storage_.ptr; }
 
     // [span.iterators], span iterator support
-    constexpr iterator begin() const noexcept { return data(); }
+    constexpr iterator begin() const TCB_SPAN_NOEXCEPT { return data(); }
 
-    constexpr iterator end() const noexcept { return data() + size(); }
+    constexpr iterator end() const TCB_SPAN_NOEXCEPT { return data() + size(); }
 
-    constexpr const_iterator cbegin() const noexcept { return begin(); }
+    constexpr const_iterator cbegin() const TCB_SPAN_NOEXCEPT { return begin(); }
 
-    constexpr const_iterator cend() const noexcept { return end(); }
+    constexpr const_iterator cend() const TCB_SPAN_NOEXCEPT { return end(); }
 
-    TCB_SPAN_ARRAY_CONSTEXPR reverse_iterator rbegin() const noexcept
+    TCB_SPAN_ARRAY_CONSTEXPR reverse_iterator rbegin() const TCB_SPAN_NOEXCEPT
     {
         return reverse_iterator(end());
     }
 
-    TCB_SPAN_ARRAY_CONSTEXPR reverse_iterator rend() const noexcept
+    TCB_SPAN_ARRAY_CONSTEXPR reverse_iterator rend() const TCB_SPAN_NOEXCEPT
     {
         return reverse_iterator(begin());
     }
 
-    TCB_SPAN_ARRAY_CONSTEXPR const_reverse_iterator crbegin() const noexcept
+    TCB_SPAN_ARRAY_CONSTEXPR const_reverse_iterator crbegin() const TCB_SPAN_NOEXCEPT
     {
         return const_reverse_iterator(cend());
     }
 
-    TCB_SPAN_ARRAY_CONSTEXPR const_reverse_iterator crend() const noexcept
+    TCB_SPAN_ARRAY_CONSTEXPR const_reverse_iterator crend() const TCB_SPAN_NOEXCEPT
     {
         return const_reverse_iterator(cbegin());
     }
@@ -535,26 +542,26 @@ span(const Container&) -> span<const typename Container::value_type>;
 
 template <typename ElementType, std::size_t Extent>
 constexpr span<ElementType, Extent>
-make_span(span<ElementType, Extent> s) noexcept
+make_span(span<ElementType, Extent> s) TCB_SPAN_NOEXCEPT
 {
     return s;
 }
 
 template <typename T, std::size_t N>
-constexpr span<T, N> make_span(T (&arr)[N]) noexcept
+constexpr span<T, N> make_span(T (&arr)[N]) TCB_SPAN_NOEXCEPT
 {
     return {arr};
 }
 
 template <typename T, std::size_t N>
-TCB_SPAN_ARRAY_CONSTEXPR span<T, N> make_span(std::array<T, N>& arr) noexcept
+TCB_SPAN_ARRAY_CONSTEXPR span<T, N> make_span(std::array<T, N>& arr) TCB_SPAN_NOEXCEPT
 {
     return {arr};
 }
 
 template <typename T, std::size_t N>
 TCB_SPAN_ARRAY_CONSTEXPR span<const T, N>
-make_span(const std::array<T, N>& arr) noexcept
+make_span(const std::array<T, N>& arr) TCB_SPAN_NOEXCEPT
 {
     return {arr};
 }
@@ -638,7 +645,7 @@ template <typename ElementType, std::size_t Extent>
 span<const byte, ((Extent == dynamic_extent)
                       ? dynamic_extent
                       : sizeof(ElementType) * Extent)>
-as_bytes(span<ElementType, Extent> s) noexcept
+as_bytes(span<ElementType, Extent> s) TCB_SPAN_NOEXCEPT
 {
     return {reinterpret_cast<const byte*>(s.data()), s.size_bytes()};
 }
@@ -649,7 +656,7 @@ template <
 span<byte, ((Extent == dynamic_extent)
                 ? dynamic_extent
                 : sizeof(ElementType) * Extent)>
-as_writable_bytes(span<ElementType, Extent> s) noexcept
+as_writable_bytes(span<ElementType, Extent> s) TCB_SPAN_NOEXCEPT
 {
     return {reinterpret_cast<byte*>(s.data()), s.size_bytes()};
 }
