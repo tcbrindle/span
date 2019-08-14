@@ -98,7 +98,8 @@ inline void contract_violation(const char* msg)
 #define TCB_SPAN_CONSTEXPR14
 #endif
 
-#if defined(TCB_SPAN_HAVE_CPP14_CONSTEXPR) && (!defined(_MSC_VER) || _MSC_VER > 1900)
+#if defined(TCB_SPAN_HAVE_CPP14_CONSTEXPR) &&                                  \
+    (!defined(_MSC_VER) || _MSC_VER > 1900)
 #define TCB_SPAN_CONSTEXPR_ASSIGN constexpr
 #else
 #define TCB_SPAN_CONSTEXPR_ASSIGN
@@ -151,8 +152,7 @@ template <typename E, std::size_t S>
 struct span_storage {
     constexpr span_storage() noexcept = default;
 
-    constexpr span_storage(E* ptr, std::size_t /*unused*/) noexcept
-        : ptr(ptr)
+    constexpr span_storage(E* ptr, std::size_t /*unused*/) noexcept : ptr(ptr)
     {}
 
     E* ptr = nullptr;
@@ -303,8 +303,9 @@ public:
     static constexpr index_type extent = Extent;
 
     // [span.cons], span constructors, copy, assignment, and destructor
-    template <std::size_t E = Extent,
-              typename std::enable_if<(E == dynamic_extent || E <= 0), int>::type = 0>
+    template <
+        std::size_t E = Extent,
+        typename std::enable_if<(E == dynamic_extent || E <= 0), int>::type = 0>
     constexpr span() noexcept
     {}
 
@@ -318,59 +319,57 @@ public:
         : storage_(first_elem, last_elem - first_elem)
     {
         TCB_SPAN_EXPECT(extent == dynamic_extent ||
-                        last_elem - first_elem == static_cast<std::ptrdiff_t>(extent));
+                        last_elem - first_elem ==
+                            static_cast<std::ptrdiff_t>(extent));
     }
 
-    template <
-        std::size_t N, std::size_t E = Extent,
-        typename std::enable_if<
-            (E == dynamic_extent || N == E) &&
-                detail::is_container_element_type_compatible<
-                    element_type (&)[N], ElementType>::value,
-            int>::type = 0>
+    template <std::size_t N, std::size_t E = Extent,
+              typename std::enable_if<
+                  (E == dynamic_extent || N == E) &&
+                      detail::is_container_element_type_compatible<
+                          element_type (&)[N], ElementType>::value,
+                  int>::type = 0>
     constexpr span(element_type (&arr)[N]) noexcept : storage_(arr, N)
     {}
 
-    template <
-        std::size_t N, std::size_t E = Extent,
-        typename std::enable_if<
-            (E == dynamic_extent || N == E) &&
-                detail::is_container_element_type_compatible<
-                    std::array<value_type, N>&, ElementType>::value,
-            int>::type = 0>
+    template <std::size_t N, std::size_t E = Extent,
+              typename std::enable_if<
+                  (E == dynamic_extent || N == E) &&
+                      detail::is_container_element_type_compatible<
+                          std::array<value_type, N>&, ElementType>::value,
+                  int>::type = 0>
     TCB_SPAN_ARRAY_CONSTEXPR span(std::array<value_type, N>& arr) noexcept
         : storage_(arr.data(), N)
     {}
 
-    template <
-        std::size_t N, std::size_t E = Extent,
-        typename std::enable_if<
-            (E == dynamic_extent || N == E) &&
-                detail::is_container_element_type_compatible<
-                    const std::array<value_type, N>&, ElementType>::value,
-            int>::type = 0>
+    template <std::size_t N, std::size_t E = Extent,
+              typename std::enable_if<
+                  (E == dynamic_extent || N == E) &&
+                      detail::is_container_element_type_compatible<
+                          const std::array<value_type, N>&, ElementType>::value,
+                  int>::type = 0>
     TCB_SPAN_ARRAY_CONSTEXPR span(const std::array<value_type, N>& arr) noexcept
         : storage_(arr.data(), N)
     {}
 
-    template <typename Container, std::size_t E = Extent,
-              typename std::enable_if<
-                  E == dynamic_extent &&
-                  detail::is_container<Container>::value &&
-                      detail::is_container_element_type_compatible<
-                          Container&, ElementType>::value,
-                  int>::type = 0>
+    template <
+        typename Container, std::size_t E = Extent,
+        typename std::enable_if<
+            E == dynamic_extent && detail::is_container<Container>::value &&
+                detail::is_container_element_type_compatible<
+                    Container&, ElementType>::value,
+            int>::type = 0>
     constexpr span(Container& cont)
         : storage_(detail::data(cont), detail::size(cont))
     {}
 
-    template <typename Container, std::size_t E = Extent,
-              typename std::enable_if<
-                  E == dynamic_extent &&
-                  detail::is_container<Container>::value &&
-                      detail::is_container_element_type_compatible<
-                          const Container&, ElementType>::value,
-                  int>::type = 0>
+    template <
+        typename Container, std::size_t E = Extent,
+        typename std::enable_if<
+            E == dynamic_extent && detail::is_container<Container>::value &&
+                detail::is_container_element_type_compatible<
+                    const Container&, ElementType>::value,
+            int>::type = 0>
     constexpr span(const Container& cont)
         : storage_(detail::data(cont), detail::size(cont))
     {}
@@ -389,7 +388,8 @@ public:
 
     ~span() noexcept = default;
 
-    TCB_SPAN_CONSTEXPR_ASSIGN span& operator=(const span& other) noexcept = default;
+    TCB_SPAN_CONSTEXPR_ASSIGN span&
+    operator=(const span& other) noexcept = default;
 
     // [span.sub], span subviews
     template <std::size_t Count>
@@ -453,7 +453,10 @@ public:
         return size() * sizeof(element_type);
     }
 
-    TCB_SPAN_NODISCARD constexpr bool empty() const noexcept { return size() == 0; }
+    TCB_SPAN_NODISCARD constexpr bool empty() const noexcept
+    {
+        return size() == 0;
+    }
 
     // [span.elem], span element access
     TCB_SPAN_CONSTEXPR11 reference operator[](index_type idx) const
@@ -517,19 +520,19 @@ private:
 
 /* Deduction Guides */
 template <class T, size_t N>
-span(T (&)[N]) -> span<T, N>;
+span(T (&)[N])->span<T, N>;
 
 template <class T, size_t N>
-span(std::array<T, N>&) -> span<T, N>;
+span(std::array<T, N>&)->span<T, N>;
 
 template <class T, size_t N>
-span(const std::array<T, N>&) -> span<const T, N>;
+span(const std::array<T, N>&)->span<const T, N>;
 
 template <class Container>
-span(Container&) -> span<typename Container::value_type>;
+span(Container&)->span<typename Container::value_type>;
 
 template <class Container>
-span(const Container&) -> span<const typename Container::value_type>;
+span(const Container&)->span<const typename Container::value_type>;
 
 #endif // TCB_HAVE_DEDUCTION_GUIDES
 
@@ -602,8 +605,7 @@ template <typename T, std::size_t X, typename U, std::size_t Y>
 TCB_SPAN_CONSTEXPR14 bool operator<(span<T, X> lhs, span<U, Y> rhs)
 {
     // No std::min to avoid dragging in <algorithm>
-    const std::size_t size =
-        lhs.size() < rhs.size() ? lhs.size() : rhs.size();
+    const std::size_t size = lhs.size() < rhs.size() ? lhs.size() : rhs.size();
 
     for (std::size_t i = 0; i < size; i++) {
         if (lhs[i] < rhs[i]) {
@@ -635,9 +637,8 @@ TCB_SPAN_CONSTEXPR14 bool operator>=(span<T, X> lhs, span<U, Y> rhs)
 }
 
 template <typename ElementType, std::size_t Extent>
-span<const byte, ((Extent == dynamic_extent)
-                      ? dynamic_extent
-                      : sizeof(ElementType) * Extent)>
+span<const byte, ((Extent == dynamic_extent) ? dynamic_extent
+                                             : sizeof(ElementType) * Extent)>
 as_bytes(span<ElementType, Extent> s) noexcept
 {
     return {reinterpret_cast<const byte*>(s.data()), s.size_bytes()};
@@ -646,9 +647,8 @@ as_bytes(span<ElementType, Extent> s) noexcept
 template <
     class ElementType, size_t Extent,
     typename std::enable_if<!std::is_const<ElementType>::value, int>::type = 0>
-span<byte, ((Extent == dynamic_extent)
-                ? dynamic_extent
-                : sizeof(ElementType) * Extent)>
+span<byte, ((Extent == dynamic_extent) ? dynamic_extent
+                                       : sizeof(ElementType) * Extent)>
 as_writable_bytes(span<ElementType, Extent> s) noexcept
 {
     return {reinterpret_cast<byte*>(s.data()), s.size_bytes()};
@@ -669,13 +669,15 @@ class tuple_size<TCB_SPAN_NAMESPACE_NAME::span<ElementType, Extent>>
     : public integral_constant<size_t, Extent> {};
 
 template <typename ElementType>
-class tuple_size<TCB_SPAN_NAMESPACE_NAME::span<ElementType, TCB_SPAN_NAMESPACE_NAME::dynamic_extent>>; // not defined
+class tuple_size<TCB_SPAN_NAMESPACE_NAME::span<
+    ElementType, TCB_SPAN_NAMESPACE_NAME::dynamic_extent>>; // not defined
 
 template <size_t I, typename ElementType, size_t Extent>
 class tuple_element<I, TCB_SPAN_NAMESPACE_NAME::span<ElementType, Extent>> {
 public:
-    static_assert(Extent != TCB_SPAN_NAMESPACE_NAME::dynamic_extent
-                  && I < Extent, "");
+    static_assert(Extent != TCB_SPAN_NAMESPACE_NAME::dynamic_extent &&
+                      I < Extent,
+                  "");
     using type = ElementType;
 };
 
