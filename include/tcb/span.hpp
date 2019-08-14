@@ -505,6 +505,10 @@ public:
         return const_reverse_iterator(cbegin());
     }
 
+    friend constexpr iterator begin(span s) noexcept { return s.begin(); }
+
+    friend constexpr iterator end(span s) noexcept { return s.end(); }
+
 private:
     storage_type storage_{};
 };
