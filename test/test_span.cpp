@@ -332,15 +332,15 @@ TEST_CASE("Construction from other containers")
     static_assert(
         !std::is_constructible<span<const int>, const deque_t&>::value, "");
 
-    static_assert(std::is_constructible<span<int, 3>, vec_t&>::value, "");
+    static_assert(!std::is_constructible<span<int, 3>, vec_t&>::value, "");
     static_assert(!std::is_constructible<span<int, 3>, const vec_t&>::value,
                   "");
     static_assert(!std::is_constructible<span<int, 3>, const deque_t&>::value,
                   "");
 
-    static_assert(std::is_constructible<span<const int, 3>, vec_t&>::value, "");
+    static_assert(!std::is_constructible<span<const int, 3>, vec_t&>::value, "");
     static_assert(
-        std::is_constructible<span<const int, 3>, const vec_t&>::value, "");
+        !std::is_constructible<span<const int, 3>, const vec_t&>::value, "");
     static_assert(
         !std::is_constructible<span<const int, 3>, const deque_t&>::value, "");
 
@@ -366,7 +366,7 @@ TEST_CASE("Construction from other containers")
 
     SECTION("non-const, static size")
     {
-        vec_t arr = {1, 2, 3};
+        std::array<int, 3> arr = {1, 2, 3};
         span<int, 3> s{arr};
         REQUIRE(s.size() == 3);
         REQUIRE(s.data() == arr.data());
@@ -376,7 +376,7 @@ TEST_CASE("Construction from other containers")
 
     SECTION("const, dynamic size")
     {
-        vec_t arr = {1, 2, 3};
+        std::array<int, 3> arr = {1, 2, 3};
         span<int const, 3> s{arr};
         REQUIRE(s.size() == 3);
         REQUIRE(s.data() == arr.data());
@@ -602,6 +602,30 @@ TEST_CASE("span iterator support")
         span<const int> s{vec};
         REQUIRE(std::equal(s.rbegin(), s.rend(), vec.crbegin()));
     }
+}
+
+TEST_CASE("span non-member begin/end")
+{
+    {
+        std::vector<int> vec;
+        span<int> s(vec);
+        std::sort(begin(s), end(s));
+        REQUIRE(std::is_sorted(vec.begin(), vec.end()));
+    }
+
+    {
+        const std::vector<int> vec{1, 2, 3};
+        span<const int> s{vec};
+        REQUIRE(std::equal(begin(s), end(s), vec.begin()));
+    }
+
+#ifdef TCB_SPAN_HAVE_CONSTEXPR_STD_ARRAY_ETC
+    {
+        constexpr std::array<int, 3> arr{1, 2, 3};
+        static_assert(*begin(span<const int>{arr}) == 1);
+        static_assert(*(end(span<const int>{arr}) - 1) == 3);
+    }
+#endif
 }
 
 TEST_CASE("make_span()")
