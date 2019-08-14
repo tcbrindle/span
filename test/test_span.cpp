@@ -332,15 +332,15 @@ TEST_CASE("Construction from other containers")
     static_assert(
         !std::is_constructible<span<const int>, const deque_t&>::value, "");
 
-    static_assert(std::is_constructible<span<int, 3>, vec_t&>::value, "");
+    static_assert(!std::is_constructible<span<int, 3>, vec_t&>::value, "");
     static_assert(!std::is_constructible<span<int, 3>, const vec_t&>::value,
                   "");
     static_assert(!std::is_constructible<span<int, 3>, const deque_t&>::value,
                   "");
 
-    static_assert(std::is_constructible<span<const int, 3>, vec_t&>::value, "");
+    static_assert(!std::is_constructible<span<const int, 3>, vec_t&>::value, "");
     static_assert(
-        std::is_constructible<span<const int, 3>, const vec_t&>::value, "");
+        !std::is_constructible<span<const int, 3>, const vec_t&>::value, "");
     static_assert(
         !std::is_constructible<span<const int, 3>, const deque_t&>::value, "");
 
@@ -366,7 +366,7 @@ TEST_CASE("Construction from other containers")
 
     SECTION("non-const, static size")
     {
-        vec_t arr = {1, 2, 3};
+        std::array<int, 3> arr = {1, 2, 3};
         span<int, 3> s{arr};
         REQUIRE(s.size() == 3);
         REQUIRE(s.data() == arr.data());
@@ -376,7 +376,7 @@ TEST_CASE("Construction from other containers")
 
     SECTION("const, dynamic size")
     {
-        vec_t arr = {1, 2, 3};
+        std::array<int, 3> arr = {1, 2, 3};
         span<int const, 3> s{arr};
         REQUIRE(s.size() == 3);
         REQUIRE(s.data() == arr.data());

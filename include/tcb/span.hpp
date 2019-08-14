@@ -353,31 +353,27 @@ public:
         : storage_(arr.data(), N)
     {}
 
-    template <typename Container,
+    template <typename Container, std::size_t E = Extent,
               typename std::enable_if<
+                  E == dynamic_extent &&
                   detail::is_container<Container>::value &&
                       detail::is_container_element_type_compatible<
                           Container&, ElementType>::value,
                   int>::type = 0>
-    TCB_SPAN_CONSTEXPR11 span(Container& cont)
+    constexpr span(Container& cont)
         : storage_(detail::data(cont), detail::size(cont))
-    {
-        TCB_SPAN_EXPECT(extent == dynamic_extent ||
-                        detail::size(cont) ==  extent);
-    }
+    {}
 
-    template <typename Container,
+    template <typename Container, std::size_t E = Extent,
               typename std::enable_if<
+                  E == dynamic_extent &&
                   detail::is_container<Container>::value &&
                       detail::is_container_element_type_compatible<
                           const Container&, ElementType>::value,
                   int>::type = 0>
-    TCB_SPAN_CONSTEXPR11 span(const Container& cont)
+    constexpr span(const Container& cont)
         : storage_(detail::data(cont), detail::size(cont))
-    {
-        TCB_SPAN_EXPECT(extent == dynamic_extent ||
-                        detail::size(cont) == extent);
-    }
+    {}
 
     constexpr span(const span& other) noexcept = default;
 

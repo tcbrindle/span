@@ -28,21 +28,6 @@ TEST_CASE("span(ptr, ptr)")
     TEST((tcb::span<int, 3>{vec.data(), vec.data() + 1}));
 }
 
-TEST_CASE("span(container)")
-{
-    SECTION("non-const")
-    {
-        std::vector<int> vec{1, 2, 3};
-        TEST((tcb::span<int, 2>{vec}));
-    }
-
-    SECTION("const")
-    {
-        const std::vector<int> vec{1, 2, 3};
-        TEST((tcb::span<const int, 2>{vec}));
-    }
-}
-
 TEST_CASE("fixed-size subspans")
 {
     SECTION("first<N>()")
