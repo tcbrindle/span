@@ -23,6 +23,12 @@ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/n4820.pdf
 #endif
 #endif
 
+#ifdef __CUDACC__
+#define TCB_SPAN_CUDA_HOST_AND_DEVICE __host__ __device__
+#else
+#define TCB_SPAN_CUDA_HOST_AND_DEVICE
+#endif
+
 #ifndef TCB_SPAN_NO_EXCEPTIONS
 #include <cstdio>
 #include <stdexcept>
@@ -92,21 +98,23 @@ inline void contract_violation(const char* msg)
 #define TCB_SPAN_HAVE_CPP14_CONSTEXPR
 #endif
 
+#define TCB_SPAN_CONSTEXPR constexpr TCB_SPAN_CUDA_HOST_AND_DEVICE
+
 #if defined(TCB_SPAN_HAVE_CPP14_CONSTEXPR)
-#define TCB_SPAN_CONSTEXPR14 constexpr
+#define TCB_SPAN_CONSTEXPR14 TCB_SPAN_CONSTEXPR
 #else
 #define TCB_SPAN_CONSTEXPR14
 #endif
 
 #if defined(TCB_SPAN_HAVE_CPP14_CONSTEXPR) &&                                  \
     (!defined(_MSC_VER) || _MSC_VER > 1900)
-#define TCB_SPAN_CONSTEXPR_ASSIGN constexpr
+#define TCB_SPAN_CONSTEXPR_ASSIGN TCB_SPAN_CONSTEXPR
 #else
 #define TCB_SPAN_CONSTEXPR_ASSIGN
 #endif
 
 #if defined(TCB_SPAN_NO_CONTRACT_CHECKING)
-#define TCB_SPAN_CONSTEXPR11 constexpr
+#define TCB_SPAN_CONSTEXPR11 TCB_SPAN_CONSTEXPR
 #else
 #define TCB_SPAN_CONSTEXPR11 TCB_SPAN_CONSTEXPR14
 #endif
@@ -124,7 +132,7 @@ inline void contract_violation(const char* msg)
 #endif
 
 #if defined(TCB_SPAN_HAVE_CONSTEXPR_STD_ARRAY_ETC)
-#define TCB_SPAN_ARRAY_CONSTEXPR constexpr
+#define TCB_SPAN_ARRAY_CONSTEXPR TCB_SPAN_CONSTEXPR
 #else
 #define TCB_SPAN_ARRAY_CONSTEXPR
 #endif
@@ -150,9 +158,9 @@ namespace detail {
 
 template <typename E, std::size_t S>
 struct span_storage {
-    constexpr span_storage() noexcept = default;
+    TCB_SPAN_CONSTEXPR span_storage() noexcept = default;
 
-    constexpr span_storage(E* ptr, std::size_t /*unused*/) noexcept : ptr(ptr)
+    TCB_SPAN_CONSTEXPR span_storage(E* ptr, std::size_t /*unused*/) noexcept : ptr(ptr)
     {}
 
     E* ptr = nullptr;
@@ -161,9 +169,9 @@ struct span_storage {
 
 template <typename E>
 struct span_storage<E, dynamic_extent> {
-    constexpr span_storage() noexcept = default;
+    TCB_SPAN_CONSTEXPR span_storage() noexcept = default;
 
-    constexpr span_storage(E* ptr, std::size_t size) noexcept
+    TCB_SPAN_CONSTEXPR span_storage(E* ptr, std::size_t size) noexcept
         : ptr(ptr), size(size)
     {}
 
@@ -178,37 +186,37 @@ using std::data;
 using std::size;
 #else
 template <class C>
-constexpr auto size(const C& c) -> decltype(c.size())
+TCB_SPAN_CONSTEXPR auto size(const C& c) -> decltype(c.size())
 {
     return c.size();
 }
 
 template <class T, std::size_t N>
-constexpr std::size_t size(const T (&)[N]) noexcept
+TCB_SPAN_CONSTEXPR std::size_t size(const T (&)[N]) noexcept
 {
     return N;
 }
 
 template <class C>
-constexpr auto data(C& c) -> decltype(c.data())
+TCB_SPAN_CONSTEXPR auto data(C& c) -> decltype(c.data())
 {
     return c.data();
 }
 
 template <class C>
-constexpr auto data(const C& c) -> decltype(c.data())
+TCB_SPAN_CONSTEXPR auto data(const C& c) -> decltype(c.data())
 {
     return c.data();
 }
 
 template <class T, std::size_t N>
-constexpr T* data(T (&array)[N]) noexcept
+TCB_SPAN_CONSTEXPR T* data(T (&array)[N]) noexcept
 {
     return array;
 }
 
 template <class E>
-constexpr const E* data(std::initializer_list<E> il) noexcept
+TCB_SPAN_CONSTEXPR const E* data(std::initializer_list<E> il) noexcept
 {
     return il.begin();
 }
@@ -306,7 +314,7 @@ public:
     template <
         std::size_t E = Extent,
         typename std::enable_if<(E == dynamic_extent || E <= 0), int>::type = 0>
-    constexpr span() noexcept
+    TCB_SPAN_CONSTEXPR span() noexcept
     {}
 
     TCB_SPAN_CONSTEXPR11 span(pointer ptr, index_type count)
@@ -329,7 +337,7 @@ public:
                       detail::is_container_element_type_compatible<
                           element_type (&)[N], ElementType>::value,
                   int>::type = 0>
-    constexpr span(element_type (&arr)[N]) noexcept : storage_(arr, N)
+    TCB_SPAN_CONSTEXPR span(element_type (&arr)[N]) noexcept : storage_(arr, N)
     {}
 
     template <std::size_t N, std::size_t E = Extent,
@@ -359,7 +367,7 @@ public:
                 detail::is_container_element_type_compatible<
                     Container&, ElementType>::value,
             int>::type = 0>
-    constexpr span(Container& cont)
+    TCB_SPAN_CONSTEXPR span(Container& cont)
         : storage_(detail::data(cont), detail::size(cont))
     {}
 
@@ -370,11 +378,11 @@ public:
                 detail::is_container_element_type_compatible<
                     const Container&, ElementType>::value,
             int>::type = 0>
-    constexpr span(const Container& cont)
+    TCB_SPAN_CONSTEXPR span(const Container& cont)
         : storage_(detail::data(cont), detail::size(cont))
     {}
 
-    constexpr span(const span& other) noexcept = default;
+    TCB_SPAN_CONSTEXPR span(const span& other) noexcept = default;
 
     template <typename OtherElementType, std::size_t OtherExtent,
               typename std::enable_if<
@@ -382,7 +390,7 @@ public:
                       std::is_convertible<OtherElementType (*)[],
                                           ElementType (*)[]>::value,
                   int>::type = 0>
-    constexpr span(const span<OtherElementType, OtherExtent>& other) noexcept
+    TCB_SPAN_CONSTEXPR span(const span<OtherElementType, OtherExtent>& other) noexcept
         : storage_(other.data(), other.size())
     {}
 
@@ -446,14 +454,14 @@ public:
     }
 
     // [span.obs], span observers
-    constexpr index_type size() const noexcept { return storage_.size; }
+    TCB_SPAN_CONSTEXPR index_type size() const noexcept { return storage_.size; }
 
-    constexpr index_type size_bytes() const noexcept
+    TCB_SPAN_CONSTEXPR index_type size_bytes() const noexcept
     {
         return size() * sizeof(element_type);
     }
 
-    TCB_SPAN_NODISCARD constexpr bool empty() const noexcept
+    TCB_SPAN_NODISCARD TCB_SPAN_CONSTEXPR bool empty() const noexcept
     {
         return size() == 0;
     }
@@ -477,16 +485,16 @@ public:
         return *(data() + (size() - 1));
     }
 
-    constexpr pointer data() const noexcept { return storage_.ptr; }
+    TCB_SPAN_CONSTEXPR pointer data() const noexcept { return storage_.ptr; }
 
     // [span.iterators], span iterator support
-    constexpr iterator begin() const noexcept { return data(); }
+    TCB_SPAN_CONSTEXPR iterator begin() const noexcept { return data(); }
 
-    constexpr iterator end() const noexcept { return data() + size(); }
+    TCB_SPAN_CONSTEXPR iterator end() const noexcept { return data() + size(); }
 
-    constexpr const_iterator cbegin() const noexcept { return begin(); }
+    TCB_SPAN_CONSTEXPR const_iterator cbegin() const noexcept { return begin(); }
 
-    constexpr const_iterator cend() const noexcept { return end(); }
+    TCB_SPAN_CONSTEXPR const_iterator cend() const noexcept { return end(); }
 
     TCB_SPAN_ARRAY_CONSTEXPR reverse_iterator rbegin() const noexcept
     {
@@ -508,9 +516,9 @@ public:
         return const_reverse_iterator(cbegin());
     }
 
-    friend constexpr iterator begin(span s) noexcept { return s.begin(); }
+    friend TCB_SPAN_CONSTEXPR iterator begin(span s) noexcept { return s.begin(); }
 
-    friend constexpr iterator end(span s) noexcept { return s.end(); }
+    friend TCB_SPAN_CONSTEXPR iterator end(span s) noexcept { return s.end(); }
 
 private:
     storage_type storage_{};
@@ -537,14 +545,14 @@ span(const Container&)->span<const typename Container::value_type>;
 #endif // TCB_HAVE_DEDUCTION_GUIDES
 
 template <typename ElementType, std::size_t Extent>
-constexpr span<ElementType, Extent>
+TCB_SPAN_CONSTEXPR span<ElementType, Extent>
 make_span(span<ElementType, Extent> s) noexcept
 {
     return s;
 }
 
 template <typename T, std::size_t N>
-constexpr span<T, N> make_span(T (&arr)[N]) noexcept
+TCB_SPAN_CONSTEXPR span<T, N> make_span(T (&arr)[N]) noexcept
 {
     return {arr};
 }
@@ -563,7 +571,7 @@ make_span(const std::array<T, N>& arr) noexcept
 }
 
 template <typename Container>
-constexpr span<typename Container::value_type> make_span(Container& cont)
+TCB_SPAN_CONSTEXPR span<typename Container::value_type> make_span(Container& cont)
 {
     return {cont};
 }
@@ -655,7 +663,7 @@ as_writable_bytes(span<ElementType, Extent> s) noexcept
 }
 
 template <std::size_t N, typename E, std::size_t S>
-constexpr auto get(span<E, S> s) -> decltype(s[N])
+TCB_SPAN_CONSTEXPR auto get(span<E, S> s) -> decltype(s[N])
 {
     return s[N];
 }
