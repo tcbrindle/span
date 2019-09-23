@@ -14,6 +14,7 @@ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/n4820.pdf
 
 #include <array>
 #include <cstddef>
+#include <cstdint>
 #include <type_traits>
 
 #ifndef TCB_SPAN_NO_EXCEPTIONS
@@ -141,7 +142,7 @@ using byte = unsigned char;
 #define TCB_SPAN_NODISCARD
 #endif
 
-TCB_SPAN_INLINE_VAR constexpr std::size_t dynamic_extent = -1;
+TCB_SPAN_INLINE_VAR constexpr std::size_t dynamic_extent = SIZE_MAX;
 
 template <typename ElementType, std::size_t Extent = dynamic_extent>
 class span;
