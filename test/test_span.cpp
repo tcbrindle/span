@@ -344,6 +344,13 @@ TEST_CASE("Construction from other containers")
     static_assert(
         !std::is_constructible<span<const int, 3>, const deque_t&>::value, "");
 
+    // vector<bool> is not contiguous and cannot be converted to span<bool>
+    // Regression test for https://github.com/tcbrindle/span/issues/24
+    static_assert(
+        !std::is_constructible<span<bool>, std::vector<bool>&>::value, "");
+    static_assert(!std::is_constructible<span<const bool>,
+                                         const std::vector<bool>&>::value, "");
+
     SECTION("non-const, dynamic size")
     {
         vec_t arr = {1, 2, 3};
