@@ -580,67 +580,6 @@ make_span(const Container& cont)
     return {cont};
 }
 
-/* Comparison operators */
-// Implementation note: the implementations of == and < are equivalent to
-// 4-legged std::equal and std::lexicographical_compare respectively
-
-template <typename T, std::size_t X, typename U, std::size_t Y>
-TCB_SPAN_CONSTEXPR14 bool operator==(span<T, X> lhs, span<U, Y> rhs)
-{
-    if (lhs.size() != rhs.size()) {
-        return false;
-    }
-
-    for (std::size_t i = 0; i < lhs.size(); i++) {
-        if (lhs[i] != rhs[i]) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-template <typename T, std::size_t X, typename U, std::size_t Y>
-TCB_SPAN_CONSTEXPR14 bool operator!=(span<T, X> lhs, span<U, Y> rhs)
-{
-    return !(lhs == rhs);
-}
-
-template <typename T, std::size_t X, typename U, std::size_t Y>
-TCB_SPAN_CONSTEXPR14 bool operator<(span<T, X> lhs, span<U, Y> rhs)
-{
-    // No std::min to avoid dragging in <algorithm>
-    const std::size_t size = lhs.size() < rhs.size() ? lhs.size() : rhs.size();
-
-    for (std::size_t i = 0; i < size; i++) {
-        if (lhs[i] < rhs[i]) {
-            return true;
-        }
-        if (lhs[i] > rhs[i]) {
-            return false;
-        }
-    }
-    return lhs.size() < rhs.size();
-}
-
-template <typename T, std::size_t X, typename U, std::size_t Y>
-TCB_SPAN_CONSTEXPR14 bool operator<=(span<T, X> lhs, span<U, Y> rhs)
-{
-    return !(rhs < lhs);
-}
-
-template <typename T, std::size_t X, typename U, std::size_t Y>
-TCB_SPAN_CONSTEXPR14 bool operator>(span<T, X> lhs, span<U, Y> rhs)
-{
-    return rhs < lhs;
-}
-
-template <typename T, std::size_t X, typename U, std::size_t Y>
-TCB_SPAN_CONSTEXPR14 bool operator>=(span<T, X> lhs, span<U, Y> rhs)
-{
-    return !(lhs < rhs);
-}
-
 template <typename ElementType, std::size_t Extent>
 span<const byte, ((Extent == dynamic_extent) ? dynamic_extent
                                              : sizeof(ElementType) * Extent)>
