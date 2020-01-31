@@ -295,7 +295,7 @@ public:
     // constants and types
     using element_type = ElementType;
     using value_type = typename std::remove_cv<ElementType>::type;
-    using index_type = std::size_t;
+    using size_type = std::size_t;
     using difference_type = std::ptrdiff_t;
     using pointer = element_type*;
     using const_pointer = const element_type*;
@@ -305,7 +305,7 @@ public:
     using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-    static constexpr index_type extent = Extent;
+    static constexpr size_type extent = Extent;
 
     // [span.cons], span constructors, copy, assignment, and destructor
     template <
@@ -314,7 +314,7 @@ public:
     constexpr span() noexcept
     {}
 
-    TCB_SPAN_CONSTEXPR11 span(pointer ptr, index_type count)
+    TCB_SPAN_CONSTEXPR11 span(pointer ptr, size_type count)
         : storage_(ptr, count)
     {
         TCB_SPAN_EXPECT(extent == dynamic_extent || count == extent);
@@ -428,21 +428,21 @@ public:
     }
 
     TCB_SPAN_CONSTEXPR11 span<element_type, dynamic_extent>
-    first(index_type count) const
+    first(size_type count) const
     {
         TCB_SPAN_EXPECT(count <= size());
         return {data(), count};
     }
 
     TCB_SPAN_CONSTEXPR11 span<element_type, dynamic_extent>
-    last(index_type count) const
+    last(size_type count) const
     {
         TCB_SPAN_EXPECT(count <= size());
         return {data() + (size() - count), count};
     }
 
     TCB_SPAN_CONSTEXPR11 span<element_type, dynamic_extent>
-    subspan(index_type offset, index_type count = dynamic_extent) const
+    subspan(size_type offset, size_type count = dynamic_extent) const
     {
         TCB_SPAN_EXPECT(offset <= size() &&
                         (count == dynamic_extent || offset + count <= size()));
@@ -451,9 +451,9 @@ public:
     }
 
     // [span.obs], span observers
-    constexpr index_type size() const noexcept { return storage_.size; }
+    constexpr size_type size() const noexcept { return storage_.size; }
 
-    constexpr index_type size_bytes() const noexcept
+    constexpr size_type size_bytes() const noexcept
     {
         return size() * sizeof(element_type);
     }
@@ -464,7 +464,7 @@ public:
     }
 
     // [span.elem], span element access
-    TCB_SPAN_CONSTEXPR11 reference operator[](index_type idx) const
+    TCB_SPAN_CONSTEXPR11 reference operator[](size_type idx) const
     {
         TCB_SPAN_EXPECT(idx < size());
         return *(data() + idx);
