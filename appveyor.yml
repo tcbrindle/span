@@ -18,15 +18,6 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
       CXX_VER: 11
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 Preview
-      CXX_VER: 17
-
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 Preview
-      CXX_VER: 14
-
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 Preview
-      CXX_VER: 11
-
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       CXX_VER: 17
 
