@@ -611,30 +611,6 @@ TEST_CASE("span iterator support")
     }
 }
 
-TEST_CASE("span non-member begin/end")
-{
-    {
-        std::vector<int> vec;
-        span<int> s(vec);
-        std::sort(begin(s), end(s));
-        REQUIRE(std::is_sorted(vec.begin(), vec.end()));
-    }
-
-    {
-        const std::vector<int> vec{1, 2, 3};
-        span<const int> s{vec};
-        REQUIRE(std::equal(begin(s), end(s), vec.begin()));
-    }
-
-#ifdef TCB_SPAN_HAVE_CONSTEXPR_STD_ARRAY_ETC
-    {
-        constexpr std::array<int, 3> arr{1, 2, 3};
-        static_assert(*begin(span<const int>{arr}) == 1);
-        static_assert(*(end(span<const int>{arr}) - 1) == 3);
-    }
-#endif
-}
-
 TEST_CASE("make_span()")
 {
     {
