@@ -301,6 +301,7 @@ public:
     using pointer = element_type*;
     using const_pointer = const element_type*;
     using reference = element_type&;
+    using const_reference = const element_type&;
     using iterator = pointer;
     using reverse_iterator = std::reverse_iterator<iterator>;
 
