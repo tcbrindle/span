@@ -301,10 +301,9 @@ public:
     using pointer = element_type*;
     using const_pointer = const element_type*;
     using reference = element_type&;
+    using const_reference = const element_type&;
     using iterator = pointer;
-    using const_iterator = const_pointer;
     using reverse_iterator = std::reverse_iterator<iterator>;
-    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     static constexpr size_type extent = Extent;
 
@@ -490,10 +489,6 @@ public:
 
     constexpr iterator end() const noexcept { return data() + size(); }
 
-    constexpr const_iterator cbegin() const noexcept { return begin(); }
-
-    constexpr const_iterator cend() const noexcept { return end(); }
-
     TCB_SPAN_ARRAY_CONSTEXPR reverse_iterator rbegin() const noexcept
     {
         return reverse_iterator(end());
@@ -503,20 +498,6 @@ public:
     {
         return reverse_iterator(begin());
     }
-
-    TCB_SPAN_ARRAY_CONSTEXPR const_reverse_iterator crbegin() const noexcept
-    {
-        return const_reverse_iterator(cend());
-    }
-
-    TCB_SPAN_ARRAY_CONSTEXPR const_reverse_iterator crend() const noexcept
-    {
-        return const_reverse_iterator(cbegin());
-    }
-
-    friend constexpr iterator begin(span s) noexcept { return s.begin(); }
-
-    friend constexpr iterator end(span s) noexcept { return s.end(); }
 
 private:
     storage_type storage_{};
