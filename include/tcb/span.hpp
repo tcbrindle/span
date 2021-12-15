@@ -264,12 +264,14 @@ template <typename T, typename E>
 struct is_container_element_type_compatible<
     T, E,
     typename std::enable_if<
-        !std::is_same<typename std::remove_cv<decltype(
-                          detail::data(std::declval<T>()))>::type,
-                      void>::value>::type>
-    : std::is_convertible<
-          remove_pointer_t<decltype(detail::data(std::declval<T>()))> (*)[],
-          E (*)[]> {};
+        !std::is_same<
+            typename std::remove_cv<decltype(detail::data(std::declval<T>()))>::type,
+            void>::value &&
+        std::is_convertible<
+            remove_pointer_t<decltype(detail::data(std::declval<T>()))> (*)[],
+            E (*)[]>::value
+        >::type>
+    : std::true_type {};
 
 template <typename, typename = size_t>
 struct is_complete : std::false_type {};
