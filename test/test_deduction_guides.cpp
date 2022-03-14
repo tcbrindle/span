@@ -66,6 +66,24 @@ TCB_SPAN_ARRAY_CONSTEXPR bool test_const_std_array()
     return equal(arr, s);
 }
 
+TCB_SPAN_ARRAY_CONSTEXPR bool test_std_array_const()
+{
+    auto arr = std::array<const int, 3>{1, 2, 3};
+    auto s = span{arr};
+    static_assert(std::is_same_v<decltype(s), span<const int, 3>>);
+
+    return equal(arr, s);
+}
+
+TCB_SPAN_ARRAY_CONSTEXPR bool test_const_std_array_const()
+{
+    const auto arr = std::array<const int, 3>{1, 2, 3};
+    auto s = span{arr};
+    static_assert(std::is_same_v<decltype(s), span<const int, 3>>);
+
+    return equal(arr, s);
+}
+
 bool test_vec()
 {
     auto arr = std::vector{1, 2, 3};
@@ -84,6 +102,26 @@ bool test_const_vec()
     return equal(arr, s);
 }
 
+#ifdef TCB_SPAN_HAVE_CPP17
+bool test_string_view()
+{
+    auto str = std::string_view{"hello"};
+    auto s = span{str};
+    static_assert(std::is_same_v<decltype(s), span<const char>>);
+
+    return equal(str, s);
+}
+
+bool test_const_string_view()
+{
+    const auto str = std::string_view{"hello"};
+    auto s = span{str};
+    static_assert(std::is_same_v<decltype(s), span<const char>>);
+
+    return equal(str, s);
+}
+#endif // TCB_SPAN_HAVE_CPP17
+
 }
 
 TEST_CASE("Deduction from raw arrays")
@@ -97,8 +135,14 @@ TEST_CASE("Deduction from raw arrays")
 
     REQUIRE(test_std_array());
     REQUIRE(test_const_std_array());
+    REQUIRE(test_std_array_const());
+    REQUIRE(test_const_std_array_const());
     REQUIRE(test_vec());
     REQUIRE(test_const_vec());
+#ifdef TCB_SPAN_HAVE_CPP17
+    REQUIRE(test_string_view());
+    REQUIRE(test_const_string_view());
+#endif // TCB_SPAN_HAVE_CPP17
 }
 
 #endif // TCB_SPAN_HAVE_DEDUCTION_GUIDES
