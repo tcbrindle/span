@@ -646,6 +646,22 @@ TEST_CASE("make_span()")
     }
 
     {
+        std::array<const int, 3> arr = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
+        REQUIRE(s.data() == arr.data());
+        REQUIRE(s.size() == 3);
+    }
+
+    {
+        const std::array<const int, 3> arr = {1, 2, 3};
+        auto s = tcb::make_span(arr);
+        static_assert(std::is_same<decltype(s), span<const int, 3>>::value, "");
+        REQUIRE(s.data() == arr.data());
+        REQUIRE(s.size() == 3);
+    }
+
+    {
         std::vector<int> arr = {1, 2, 3};
         auto s = tcb::make_span(arr);
         static_assert(std::is_same<decltype(s), span<int>>::value, "");
@@ -660,4 +676,22 @@ TEST_CASE("make_span()")
         REQUIRE(s.data() == arr.data());
         REQUIRE(s.size() == arr.size());
     }
+
+#ifdef TCB_SPAN_HAVE_CPP17
+    {
+        std::string_view str = "hello";
+        auto s = tcb::make_span(str);
+        static_assert(std::is_same<decltype(s), span<const char>>::value, "");
+        REQUIRE(s.data() == str.data());
+        REQUIRE(s.size() == str.size());
+    }
+
+    {
+        const std::string_view str = "hello";
+        auto s = tcb::make_span(str);
+        static_assert(std::is_same<decltype(s), span<const char>>::value, "");
+        REQUIRE(s.data() == str.data());
+        REQUIRE(s.size() == str.size());
+    }
+#endif // TCB_SPAN_HAVE_CPP17
 }
