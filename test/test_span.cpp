@@ -407,7 +407,8 @@ TEST_CASE("construction from spans of different size")
                   "");
     static_assert(!std::is_constructible<zero_span, big_span>::value, "");
     static_assert(!std::is_constructible<zero_span, big_const_span>::value, "");
-    static_assert(!std::is_constructible<zero_span, dynamic_span>::value, "");
+    static_assert(std::is_nothrow_constructible<zero_span, dynamic_span>::value,
+                  "");
     static_assert(!std::is_constructible<zero_span, dynamic_const_span>::value,
                   "");
 
@@ -419,17 +420,20 @@ TEST_CASE("construction from spans of different size")
     static_assert(!std::is_constructible<zero_const_span, big_span>::value, "");
     static_assert(
         !std::is_constructible<zero_const_span, big_const_span>::value, "");
-    static_assert(!std::is_constructible<zero_const_span, dynamic_span>::value,
-                  "");
     static_assert(
-        !std::is_constructible<zero_const_span, dynamic_const_span>::value, "");
+        std::is_nothrow_constructible<zero_const_span, dynamic_span>::value,
+        "");
+    static_assert(std::is_nothrow_constructible<zero_const_span,
+                                                dynamic_const_span>::value,
+                  "");
 
     static_assert(!std::is_constructible<big_span, zero_span>::value, "");
     static_assert(!std::is_constructible<big_span, zero_const_span>::value, "");
     static_assert(std::is_trivially_copyable<big_span>::value, "");
     static_assert(std::is_trivially_move_constructible<big_span>::value, "");
     static_assert(!std::is_constructible<big_span, big_const_span>::value, "");
-    static_assert(!std::is_constructible<big_span, dynamic_span>::value, "");
+    static_assert(std::is_nothrow_constructible<big_span, dynamic_span>::value,
+                  "");
     static_assert(!std::is_constructible<big_span, dynamic_const_span>::value,
                   "");
 
@@ -441,10 +445,11 @@ TEST_CASE("construction from spans of different size")
                   "");
     static_assert(
         std::is_nothrow_constructible<big_const_span, big_span>::value, "");
-    static_assert(!std::is_constructible<big_const_span, dynamic_span>::value,
-                  "");
     static_assert(
-        !std::is_constructible<big_const_span, dynamic_const_span>::value, "");
+        std::is_nothrow_constructible<big_const_span, dynamic_span>::value, "");
+    static_assert(std::is_nothrow_constructible<big_const_span,
+                                                dynamic_const_span>::value,
+                  "");
 
     static_assert(std::is_nothrow_constructible<dynamic_span, zero_span>::value,
                   "");
