@@ -596,6 +596,10 @@ constexpr auto get(span<E, S> s) -> decltype(s[N])
 
 namespace std {
 
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmismatched-tags"
+#endif
 template <typename ElementType, size_t Extent>
 class tuple_size<TCB_SPAN_NAMESPACE_NAME::span<ElementType, Extent>>
     : public integral_constant<size_t, Extent> {};
@@ -612,6 +616,9 @@ public:
                   "");
     using type = ElementType;
 };
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 } // end namespace std
 
